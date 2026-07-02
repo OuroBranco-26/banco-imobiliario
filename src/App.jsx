@@ -895,7 +895,7 @@ function App() {
   }) : [];
 
   return (
-    <div className="app-container">
+    <div className="app-container" style={{ '--theme-color': currentPlayer?.color || 'transparent' }}>
       {showTutorial && <TutorialModal onClose={() => setShowTutorial(false)} />}
       <div className="board-section glass-panel" ref={boardSectionRef} style={{ position: 'relative' }}>
         
@@ -962,11 +962,6 @@ function App() {
         </header>
 
         <div className="controls">
-          <div className="turn-indicator">
-            <h2>Vez de: <span style={{ color: currentPlayer.color }}>{currentPlayer.name}</span></h2>
-            {mode === 'online' && !isMyTurn && <p className="wait-msg">Aguarde sua vez...</p>}
-          </div>
-
           {getStatusLabel() && (
             <div className={`status-indicator ${currentPlayer.onVacation ? 'vacation' : 'jail'}`}>
               {getStatusLabel()}
