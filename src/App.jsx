@@ -860,7 +860,7 @@ function App() {
             <div><strong>Jogo em Rede</strong><br/><small>Via WiFi, até 6 jogadores</small></div>
           </button>
           <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
-            Versão Atual (1.2.8)
+            Versão Atual (1.2.9) - 02/07/2026
           </div>
         </div>
       </div>
@@ -902,7 +902,7 @@ function App() {
         {/* Speed Mode Timer */}
         {speedMode && gameStarted && (
           <div className="speed-timer" style={{
-            position: 'absolute', top: 20, right: 20, zIndex: 100,
+            position: 'fixed', top: 20, right: 20, zIndex: 2000,
             background: timeLeft <= 3 ? 'rgba(239, 68, 68, 0.9)' : 'rgba(0,0,0,0.6)',
             padding: '5px 12px', borderRadius: '20px',
             color: 'white', fontWeight: 'bold', border: '1px solid rgba(255,255,255,0.2)',
@@ -971,57 +971,59 @@ function App() {
             </div>
           )}
 
-          <div 
-            className="dice-container"
-            style={isRollingDice ? { '--roll-duration': `${isRollingDice / 1000}s` } : {}}
-          >
-            <div className={`dice-scene ${isRollingDice ? 'dice-rolling-scene' : ''}`}>
-              <div className={`dice-cube ${isRollingDice ? 'rolling' : ''}`} data-val={diceValues[0]}>
-                <div className="dice-face front"><span className="dot"></span></div>
-                <div className="dice-face back">
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span>
+          <div className="floating-dice">
+            <div 
+              className="dice-container"
+              style={isRollingDice ? { '--roll-duration': `${isRollingDice / 1000}s` } : {}}
+            >
+              <div className={`dice-scene ${isRollingDice ? 'dice-rolling-scene' : ''}`}>
+                <div className={`dice-cube ${isRollingDice ? 'rolling' : ''}`} data-val={diceValues[0]}>
+                  <div className="dice-face front"><span className="dot"></span></div>
+                  <div className="dice-face back">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                  <div className="dice-face right"><span className="dot"></span><span className="dot"></span></div>
+                  <div className="dice-face left">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                  <div className="dice-face top">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                  <div className="dice-face bottom"><span className="dot"></span><span className="dot"></span><span className="dot"></span></div>
                 </div>
-                <div className="dice-face right"><span className="dot"></span><span className="dot"></span></div>
-                <div className="dice-face left">
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
+              </div>
+              
+              <div className={`dice-scene ${isRollingDice ? 'dice-rolling-scene' : ''}`}>
+                <div className={`dice-cube ${isRollingDice ? 'rolling' : ''}`} data-val={diceValues[1]}>
+                  <div className="dice-face front"><span className="dot"></span></div>
+                  <div className="dice-face back">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                  <div className="dice-face right"><span className="dot"></span><span className="dot"></span></div>
+                  <div className="dice-face left">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                  <div className="dice-face top">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                  <div className="dice-face bottom"><span className="dot"></span><span className="dot"></span><span className="dot"></span></div>
                 </div>
-                <div className="dice-face top">
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                </div>
-                <div className="dice-face bottom"><span className="dot"></span><span className="dot"></span><span className="dot"></span></div>
               </div>
             </div>
-            
-            <div className={`dice-scene ${isRollingDice ? 'dice-rolling-scene' : ''}`}>
-              <div className={`dice-cube ${isRollingDice ? 'rolling' : ''}`} data-val={diceValues[1]}>
-                <div className="dice-face front"><span className="dot"></span></div>
-                <div className="dice-face back">
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                </div>
-                <div className="dice-face right"><span className="dot"></span><span className="dot"></span></div>
-                <div className="dice-face left">
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                </div>
-                <div className="dice-face top">
-                  <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                </div>
-                <div className="dice-face bottom"><span className="dot"></span><span className="dot"></span><span className="dot"></span></div>
-              </div>
-            </div>
+
+            {diceTotal !== null && !isRollingDice && <div className="dice-total">Total: <strong>{diceTotal}</strong> casas</div>}
+
+            <button
+              className="roll-btn"
+              onClick={handleRoll}
+              disabled={!isMyTurn || actionPrompt !== null || newsCard !== null || isMoving || isRollingDice}
+              style={{ opacity: (!isMyTurn || actionPrompt || newsCard || isMoving || isRollingDice) ? 0.5 : 1 }}
+            >
+              {isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : !isMyTurn ? 'Aguarde...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🎲 Sair da Prisão' : 'Rolar Dados'}
+            </button>
           </div>
-
-          {diceTotal !== null && !isRollingDice && <div className="dice-total">Total: <strong>{diceTotal}</strong> casas</div>}
-
-          <button
-            className="roll-btn"
-            onClick={handleRoll}
-            disabled={!isMyTurn || actionPrompt !== null || newsCard !== null || isMoving || isRollingDice}
-            style={{ opacity: (!isMyTurn || actionPrompt || newsCard || isMoving || isRollingDice) ? 0.5 : 1 }}
-          >
-            {isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : !isMyTurn ? 'Aguarde...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🎲 Sair da Prisão' : 'Rolar Dados'}
-          </button>
         </div>
 
         {/* Build */}

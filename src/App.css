@@ -287,6 +287,24 @@
   border-radius: 20px;
 }
 
+/* === FLOATING DICE SECTION === */
+.floating-dice {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 15px 25px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+}
+
 /* === ROLL BUTTON === */
 .roll-btn {
   background: linear-gradient(135deg, #38bdf8, #0284c7);
@@ -358,16 +376,28 @@
 
 /* === ACTION PANEL === */
 .action-panel {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid rgba(56,189,248,0.15);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2500;
+  min-width: 320px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid rgba(56,189,248,0.5);
   border-radius: 16px;
-  padding: 1.2rem;
+  padding: 1.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  backdrop-filter: blur(10px);
-  animation: slideIn 0.3s ease-out;
+  gap: 1rem;
+  backdrop-filter: blur(15px);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 50px rgba(0,0,0,0.8), 0 0 0 100vw rgba(0,0,0,0.6);
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: translate(-50%, -40%) scale(0.8); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 @keyframes slideIn {
@@ -767,3 +797,5 @@
   0% { transform: translateY(-30px) scale(2); opacity: 0; }
   100% { transform: translateY(0) scale(1); opacity: 0.9; }
 }
+ 
+ 
