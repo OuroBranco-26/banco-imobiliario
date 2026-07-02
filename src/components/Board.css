@@ -4,13 +4,14 @@
 
 .board {
   position: relative;
-  /* Always 50% larger than the container, minimum 1200px */
-  width: max(1200px, 150%);
-  min-height: 1200px; /* Fallback for browsers without aspect-ratio */
+  width: 1200px !important;
+  min-width: 1200px !important;
+  height: 1200px !important;
+  min-height: 1200px !important;
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   gap: 2px;
-  flex-shrink: 0;
+  flex-shrink: 0 !important;
   background: linear-gradient(145deg, #0c1524, #162033);
   border: 2px solid rgba(56,189,248,0.15);
   border-radius: 12px;
