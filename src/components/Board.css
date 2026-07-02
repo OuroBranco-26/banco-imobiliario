@@ -5,9 +5,8 @@
 .board {
   position: relative;
   width: 100%;
-  min-width: 700px;
-  min-height: 700px; /* Fallback for browsers without aspect-ratio */
-  max-width: 1200px;
+  min-width: 1200px;
+  min-height: 1200px; /* Fallback for browsers without aspect-ratio */
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   gap: 2px;
@@ -244,10 +243,6 @@
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .board { 
-    min-width: 1000px; 
-    min-height: 1000px; 
-  }
   .board-logo { font-size: 2rem; letter-spacing: 2px; }
   .space-name { font-size: 0.6rem; line-height: 1.1; }
   .space-price { font-size: 0.5rem; }
