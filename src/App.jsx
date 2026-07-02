@@ -795,6 +795,9 @@ function App() {
             <span className="mode-icon">🌐</span>
             <div><strong>Jogo em Rede</strong><br/><small>Via WiFi, até 6 jogadores</small></div>
           </button>
+          <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
+            Versão Atual (1.2.7)
+          </div>
         </div>
       </div>
     );
