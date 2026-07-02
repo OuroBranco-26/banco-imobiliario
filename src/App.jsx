@@ -1090,7 +1090,7 @@ function App() {
           <div className="action-panel">
             {actionPrompt.type === 'buy' && isMyTurn && (
               <>
-                <h3>Comprar Propriedade?</h3>
+                <h3>Comprar {BOARD_SPACES.find(s => s.id === actionPrompt.spaceId)?.name}?</h3>
                 <p>Preço: <strong>${actionPrompt.price}</strong></p>
                 <div className="action-buttons">
                   <button className="btn-buy" onClick={handleBuy}>Comprar</button>
