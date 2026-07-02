@@ -4,8 +4,8 @@
 
 .board {
   position: relative;
-  width: 100%;
-  min-width: 1200px;
+  /* Always 50% larger than the container, minimum 1200px */
+  width: max(1200px, 150%);
   min-height: 1200px; /* Fallback for browsers without aspect-ratio */
   aspect-ratio: 1 / 1;
   margin: 0 auto;
