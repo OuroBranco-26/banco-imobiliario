@@ -21,7 +21,8 @@
 }
 
 .board-center {
-  grid-area: 2 / 2 / 11 / 11;
+  grid-row: 2 / 11;
+  grid-column: 2 / 11;
   display: flex;
   justify-content: center;
   align-items: center;
