@@ -25,21 +25,27 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
   };
 
   const renderSpace = (space) => {
-    let gridRowStart = '';
-    let gridColumnStart = '';
+    let top = '';
+    let left = '';
     let spaceClass = 'space ';
     
+    const step = 100 / 11;
+    
     if (space.id >= 20 && space.id <= 30) {
-      gridRowStart = 1; gridColumnStart = space.id - 20 + 1;
+      top = '0%';
+      left = `${(space.id - 20) * step}%`;
       spaceClass += 'top';
     } else if (space.id >= 31 && space.id <= 39) {
-      gridRowStart = space.id - 30 + 1; gridColumnStart = 11;
+      top = `${(space.id - 30) * step}%`;
+      left = `${10 * step}%`;
       spaceClass += 'right';
     } else if (space.id >= 0 && space.id <= 10) {
-      gridRowStart = 11; gridColumnStart = 11 - space.id;
+      top = `${10 * step}%`;
+      left = `${(10 - space.id) * step}%`;
       spaceClass += 'bottom';
     } else if (space.id >= 11 && space.id <= 19) {
-      gridRowStart = 21 - space.id; gridColumnStart = 1;
+      top = `${(20 - space.id) * step}%`;
+      left = '0%';
       spaceClass += 'left';
     }
 
@@ -55,7 +61,7 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
       <div 
         key={space.id} 
         className={spaceClass} 
-        style={{ '--row': gridRowStart, '--col': gridColumnStart }}
+        style={{ top, left }}
       >
         {visualEffects.filter(e => e.spaceId === space.id).map(e => (
           <div key={e.id} className="effect-container">
