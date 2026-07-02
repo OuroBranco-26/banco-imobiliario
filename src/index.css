@@ -68,8 +68,6 @@ body {
   overflow: hidden;
   flex: 1;
   min-height: 0;
-  background-color: color-mix(in srgb, var(--theme-color, transparent) 10%, transparent);
-  transition: background-color 0.5s ease;
 }
 
 /* Desktop layout: Board on left/center, panels on right */
