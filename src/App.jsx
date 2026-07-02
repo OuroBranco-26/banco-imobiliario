@@ -9,6 +9,7 @@ import GameLog from './components/GameLog';
 import VictoryScreen from './components/VictoryScreen';
 import TradeModal, { TradeIncoming } from './components/TradeModal';
 import AuctionModal from './components/AuctionModal';
+import TutorialModal from './components/TutorialModal';
 import useSound from './hooks/useSound';
 import useBackgroundMusic from './hooks/useBackgroundMusic';
 import { BOARD_SPACES, COLOR_GROUPS, RAILROAD_IDS } from './data/boardData';
@@ -40,6 +41,14 @@ function App() {
   const [showTradeModal, setShowTradeModal] = useState(false);
   const [incomingTrade, setIncomingTrade] = useState(null);
   const [auction, setAuction] = useState(null);
+  
+  // === TIMER & TUTORIAL STATE ===
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialSeen, setTutorialSeen] = useState(false);
+  const [speedMode, setSpeedMode] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(10);
+  const speedModeRef = useRef(false);
+  const timeLeftRef = useRef(10);
   
   const auctionTimerRef = useRef(null);
   const boardSectionRef = useRef(null);
@@ -775,6 +784,61 @@ function App() {
     return BOARD_SPACES.filter(s => canBuildLocal(s.id));
   };
 
+  // === TIMER & SPEED MODE LOGIC ===
+  useEffect(() => {
+    if (!speedMode && gameStarted) {
+      if (currentPlayerIndex > 0 || (currentPlayerIndex === 0 && diceTotal > 0)) {
+        setSpeedMode(true);
+        speedModeRef.current = true;
+      }
+    }
+  }, [currentPlayerIndex, diceTotal, gameStarted, speedMode]);
+
+  useEffect(() => {
+    // Reset timer on turn change or prompt change
+    let newTime = 10;
+    if (actionPrompt && actionPrompt.type === 'buy') newTime = 5;
+    else if (actionPrompt && actionPrompt.type === 'info') newTime = 7;
+    else if (newsCard) newTime = 7;
+    
+    setTimeLeft(newTime);
+    timeLeftRef.current = newTime;
+  }, [currentPlayerIndex, actionPrompt, newsCard]);
+
+  useEffect(() => {
+    if (!gameStarted || !isMyTurn || !speedMode) return;
+    if (auction && auction.active) return;
+    if (incomingTrade || showTradeModal) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        const nextTime = prev - 1;
+        timeLeftRef.current = nextTime;
+        if (nextTime <= 0) {
+          clearInterval(timer);
+          // Time's up! Execute default action
+          if (!diceTotal) handleRoll();
+          else if (actionPrompt && actionPrompt.type === 'buy') handleSkip();
+          else if (actionPrompt && actionPrompt.type === 'info') handleContinue();
+          else if (newsCard) handleCloseNews();
+          else handleContinue();
+          return 0;
+        }
+        return nextTime;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [gameStarted, isMyTurn, speedMode, auction, incomingTrade, showTradeModal, diceTotal, actionPrompt, newsCard]);
+
+  // === TUTORIAL LOGIC ===
+  useEffect(() => {
+    if (gameStarted && !tutorialSeen) {
+      setShowTutorial(true);
+      setTutorialSeen(true);
+    }
+  }, [gameStarted, tutorialSeen]);
+
   // === RENDER ===
 
   // Mode selection screen
@@ -796,7 +860,7 @@ function App() {
             <div><strong>Jogo em Rede</strong><br/><small>Via WiFi, até 6 jogadores</small></div>
           </button>
           <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
-            Versão Atual (1.2.7)
+            Versão Atual (1.2.8)
           </div>
         </div>
       </div>
@@ -832,7 +896,23 @@ function App() {
 
   return (
     <div className="app-container">
+      {showTutorial && <TutorialModal onClose={() => setShowTutorial(false)} />}
       <div className="board-section glass-panel" ref={boardSectionRef} style={{ position: 'relative' }}>
+        
+        {/* Speed Mode Timer */}
+        {speedMode && gameStarted && (
+          <div className="speed-timer" style={{
+            position: 'absolute', top: 20, right: 20, zIndex: 100,
+            background: timeLeft <= 3 ? 'rgba(239, 68, 68, 0.9)' : 'rgba(0,0,0,0.6)',
+            padding: '5px 12px', borderRadius: '20px',
+            color: 'white', fontWeight: 'bold', border: '1px solid rgba(255,255,255,0.2)',
+            transition: 'background 0.3s ease',
+            animation: timeLeft <= 3 && isMyTurn ? 'musicPulse 1s infinite' : 'none'
+          }}>
+            ⏱️ {timeLeft}s {isMyTurn ? '(Sua Vez!)' : ''}
+          </div>
+        )}
+
         <Board players={players} ownership={ownership} buildings={buildings} mortgaged={mortgaged} />
         
         {/* Out of bounds indicators */}
