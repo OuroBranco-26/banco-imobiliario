@@ -4,6 +4,7 @@
 
 .board-section {
   flex: 1;
+  min-height: 0;
   display: flex;
   justify-content: flex-start; /* Fixes left-side cutoff on scroll */
   align-items: flex-start;
@@ -733,8 +734,8 @@
 
 /* === MOBILE === */
 @media (max-width: 1023px) {
-  .board-section { min-height: 400px; }
-  .ui-section { flex: none; border-left: none; border-top: 1px solid rgba(56,189,248,0.1); }
+  .board-section { flex: 1; min-height: 0; }
+  .ui-section { flex: 1; min-height: 0; border-left: none; border-top: 1px solid rgba(56,189,248,0.1); }
   .mode-title { font-size: 2rem; }
 }
 

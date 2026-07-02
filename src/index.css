@@ -65,7 +65,9 @@ body {
   width: 100%;
   padding: 1rem;
   gap: 1rem;
-  overflow-y: auto;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 /* Desktop layout: Board on left/center, panels on right */
