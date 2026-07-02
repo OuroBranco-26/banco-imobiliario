@@ -10,11 +10,11 @@
 
 .start-container {
   width: 100%;
-  max-width: 500px;
-  padding: 2.5rem;
+  max-width: 650px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -86,19 +86,19 @@
 .player-inputs {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .player-input-row {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
   animation: slideIn 0.4s ease-out;
 }
 
 .player-number {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -112,7 +112,7 @@
 
 .name-input {
   flex: 1;
-  padding: 0.7rem 1rem;
+  padding: 0.5rem 0.8rem;
   background: rgba(255,255,255,0.08);
   border: 1px solid var(--glass-border);
   border-radius: 8px;
@@ -137,8 +137,8 @@
 }
 
 .color-dot {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -180,15 +180,15 @@
 
 .avatar-picker {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 .avatar-dot {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
   border: 2px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
