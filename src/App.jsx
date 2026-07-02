@@ -913,7 +913,9 @@ function App() {
           </div>
         )}
 
-        <Board players={players} ownership={ownership} buildings={buildings} mortgaged={mortgaged} />
+        <div style={{ minWidth: '1200px', minHeight: '1200px', width: '1200px', height: '1200px', flexShrink: 0, position: 'relative' }}>
+          <Board players={players} ownership={ownership} buildings={buildings} mortgaged={mortgaged} />
+        </div>
         
         {/* Out of bounds indicators */}
         {indicators.map(ind => (
