@@ -53,6 +53,8 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  grid-row-start: var(--row);
+  grid-column-start: var(--col);
   padding: 3px;
   font-size: 0.65rem;
   transition: all 0.2s ease;

@@ -55,7 +55,7 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
       <div 
         key={space.id} 
         className={spaceClass} 
-        style={{ gridRowStart, gridColumnStart }}
+        style={{ '--row': gridRowStart, '--col': gridColumnStart }}
       >
         {visualEffects.filter(e => e.spaceId === space.id).map(e => (
           <div key={e.id} className="effect-container">
