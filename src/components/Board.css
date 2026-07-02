@@ -1,0 +1,253 @@
+/* ==============================
+   POLISHED BOARD - BANCO IMOBILIÁRIO
+   ============================== */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(11, 1fr);
+  width: 100%;
+  min-width: 700px;
+  max-width: 1200px;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  margin: 0 auto;
+  gap: 2px;
+  background: linear-gradient(145deg, #0c1524, #162033);
+  border: 2px solid rgba(56,189,248,0.15);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.board-center {
+  grid-area: 2 / 2 / 11 / 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(ellipse at center, rgba(56,189,248,0.06) 0%, transparent 70%);
+  border-radius: 4px;
+}
+
+.board-logo {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  text-align: center;
+  color: var(--color-accent);
+  text-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+  letter-spacing: 6px;
+  line-height: 1.2;
+  user-select: none;
+}
+
+/* === SPACES === */
+.space {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 3px;
+  font-size: 0.65rem;
+  transition: all 0.2s ease;
+}
+
+.space:hover {
+  background: rgba(30, 41, 59, 1);
+  border-color: rgba(56,189,248,0.2);
+  z-index: 2;
+}
+
+.space.corner {
+  font-size: 0.6rem;
+  justify-content: center;
+  background: rgba(20, 30, 48, 0.9);
+}
+
+/* === COLOR BARS === */
+.color-bar {
+  position: absolute;
+  width: 100%;
+  height: 12px;
+  top: 0;
+  left: 0;
+  opacity: 0.9;
+  transition: opacity 0.2s, height 0.2s, width 0.2s;
+}
+
+.space:hover .color-bar {
+  opacity: 1;
+  height: 14px;
+}
+
+.space.left .color-bar {
+  width: 12px;
+  height: 100%;
+  left: auto;
+  right: 0;
+  top: 0;
+}
+
+.space.left:hover .color-bar {
+  width: 14px;
+}
+
+.space.right .color-bar {
+  width: 12px;
+  height: 100%;
+  right: auto;
+  left: 0;
+  top: 0;
+}
+
+.space.right:hover .color-bar {
+  width: 14px;
+}
+
+.space.bottom .color-bar {
+  top: auto;
+  bottom: 0;
+}
+
+/* === SPACE CONTENT === */
+.space-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 1;
+}
+
+.space-name {
+  font-size: 0.75rem;
+  text-align: center;
+  color: rgba(255,255,255,0.95);
+  font-weight: 700;
+  line-height: 1.1;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.space-price {
+  font-size: 0.65rem;
+  color: var(--color-success);
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+/* === PLAYER TOKENS === */
+.players-container {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  z-index: 10;
+  justify-content: center;
+}
+
+.player-token {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 8px var(--token-glow, rgba(255,255,255,0.3));
+  animation: tokenBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+.player-token:hover {
+  transform: scale(1.5);
+  z-index: 20;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.8), 0 0 12px var(--token-glow, rgba(255,255,255,0.5));
+}
+
+@keyframes tokenBounce {
+  0% { transform: scale(0) translateY(-10px); opacity: 0; }
+  40% { transform: scale(1.4) translateY(-5px); opacity: 1; }
+  65% { transform: scale(0.85) translateY(2px); }
+  85% { transform: scale(1.08) translateY(0); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+/* === OWNER DOT === */
+.owner-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+  z-index: 5;
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
+}
+
+/* === BUILDINGS === */
+.buildings-container {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1px;
+  z-index: 5;
+}
+
+.space.left .buildings-container,
+.space.right .buildings-container {
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+
+.building {
+  font-size: 0.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+
+/* === MORTGAGE INDICATOR === */
+.space.mortgaged {
+  opacity: 0.45;
+}
+
+.space.mortgaged::after {
+  content: '💰';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  z-index: 8;
+  filter: grayscale(0.5);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .board-logo { font-size: 2rem; letter-spacing: 2px; }
+  .space-name { font-size: 0.5rem; line-height: 1.1; }
+  .space-price { font-size: 0.45rem; }
+  .player-token { width: 12px; height: 12px; border-width: 1px; }
+  .building { font-size: 0.4rem; }
+  .owner-dot { width: 6px; height: 6px; }
+  
+  .space:hover .color-bar {
+    height: 12px;
+  }
+  .space.left:hover .color-bar,
+  .space.right:hover .color-bar {
+    width: 12px;
+  }
+}

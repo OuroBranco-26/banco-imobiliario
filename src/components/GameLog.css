@@ -1,0 +1,180 @@
+/* ============================================================
+   GameLog – dark glassmorphism panel
+   ============================================================ */
+
+.game-log {
+  /* Glassmorphism card */
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: inherit;
+  color: #e2e8f0;
+  width: 100%;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.game-log__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
+  /* Subtle glow */
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.35);
+  transition: background 0.2s ease;
+}
+
+.game-log__header:hover {
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.game-log__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Chevron rotates when panel is open */
+.game-log__chevron {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 1rem;
+}
+
+.game-log__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── Collapsible body ───────────────────────────────────────── */
+
+.game-log__body {
+  max-height: 0;
+  overflow-y: auto;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 14px;
+}
+
+/* Expanded state */
+.game-log--expanded .game-log__body {
+  max-height: 250px;
+  padding: 0 14px 10px;
+}
+
+/* ── Custom scrollbar (thin, subtle) ────────────────────────── */
+
+.game-log__body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.game-log__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.game-log__body::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 4px;
+}
+
+.game-log__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+/* Firefox */
+.game-log__body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+
+.game-log__empty {
+  margin: 0;
+  padding: 8px 0;
+  color: #64748b;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* ── Entry list ─────────────────────────────────────────────── */
+
+.game-log__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.game-log__entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(30, 41, 59, 0.5);
+
+  /* Colored left accent border */
+  border-left: 3px solid rgba(56, 189, 248, 0.4);
+
+  /* Slide-in animation */
+  animation: gameLogSlideIn 0.3s ease both;
+}
+
+/* Alternate left-border colour hints based on nth-child for variety.
+   Consumers can also override via inline styles per icon type. */
+.game-log__entry:nth-child(3n+2) {
+  border-left-color: rgba(250, 204, 21, 0.5);
+}
+
+.game-log__entry:nth-child(3n+3) {
+  border-left-color: rgba(74, 222, 128, 0.5);
+}
+
+.game-log__icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.game-log__message {
+  flex: 1;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-log__time {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: #64748b;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+
+@keyframes gameLogSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
