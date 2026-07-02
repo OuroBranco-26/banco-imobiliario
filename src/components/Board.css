@@ -33,13 +33,14 @@
 
 .board-logo {
   font-family: var(--font-display);
-  font-size: 2.8rem;
+  font-size: 4.8rem;
   text-align: center;
   color: var(--color-accent);
-  text-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
-  letter-spacing: 6px;
+  text-transform: uppercase;
+  letter-spacing: 10px;
   line-height: 1.2;
   user-select: none;
+  pointer-events: none;
 }
 
 /* === SPACES === */
@@ -54,12 +55,12 @@
   overflow: hidden;
   width: calc(100% / 11);
   height: calc(100% / 11);
-  /* Cache fallback for old JS */
-  top: calc((var(--row, 1) - 1) * (100% / 11));
-  left: calc((var(--col, 1) - 1) * (100% / 11));
-  padding: 3px;
-  font-size: 0.65rem;
+  top: var(--top, 0);
+  left: var(--left, 0);
+  padding: 5px;
+  font-size: 1.1rem;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .space:hover {
@@ -69,7 +70,7 @@
 }
 
 .space.corner {
-  font-size: 0.6rem;
+  font-size: 1rem;
   justify-content: center;
   background: rgba(20, 30, 48, 0.9);
 }
@@ -78,7 +79,7 @@
 .color-bar {
   position: absolute;
   width: 100%;
-  height: 12px;
+  height: 36.75px;
   top: 0;
   left: 0;
   opacity: 0.9;
@@ -87,11 +88,11 @@
 
 .space:hover .color-bar {
   opacity: 1;
-  height: 14px;
+  height: 43.75px;
 }
 
 .space.left .color-bar {
-  width: 12px;
+  width: 21px;
   height: 100%;
   left: auto;
   right: 0;
@@ -99,11 +100,11 @@
 }
 
 .space.left:hover .color-bar {
-  width: 14px;
+  width: 43.75px;
 }
 
 .space.right .color-bar {
-  width: 12px;
+  width: 21px;
   height: 100%;
   right: auto;
   left: 0;
@@ -111,7 +112,7 @@
 }
 
 .space.right:hover .color-bar {
-  width: 14px;
+  width: 43.75px;
 }
 
 .space.bottom .color-bar {
@@ -129,16 +130,17 @@
 }
 
 .space-name {
-  font-size: 0.75rem;
+  font-size: 1.3rem;
   text-align: center;
-  color: rgba(255,255,255,0.95);
+  color: white;
   font-weight: 700;
   line-height: 1.1;
   text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  margin-top: auto;
 }
 
 .space-price {
-  font-size: 0.65rem;
+  font-size: 1.1rem;
   color: var(--color-success);
   font-weight: 800;
   opacity: 0.9;
@@ -158,18 +160,18 @@
 }
 
 .player-token {
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.9);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 8px var(--token-glow, rgba(255,255,255,0.3));
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: tokenBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transition: all 0.2s ease;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.6rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -192,10 +194,10 @@
   position: absolute;
   top: 3px;
   right: 3px;
-  width: 12px;
-  height: 12px;
+  width: 21px;
+  height: 21px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1.5px solid white;
   z-index: 5;
   box-shadow: 0 0 4px rgba(0,0,0,0.4);
 }
@@ -220,7 +222,7 @@
 }
 
 .building {
-  font-size: 0.75rem;
+  font-size: 1.3rem;
   line-height: 1;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
 }
@@ -236,25 +238,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.2rem;
+  font-size: 2.1rem;
   z-index: 8;
   filter: grayscale(0.5);
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
-  .board-logo { font-size: 2rem; letter-spacing: 2px; }
-  .space-name { font-size: 0.6rem; line-height: 1.1; }
-  .space-price { font-size: 0.5rem; }
-  .player-token { width: 12px; height: 12px; border-width: 1px; }
-  .building { font-size: 0.6rem; }
-  .owner-dot { width: 9px; height: 9px; }
-  
-  .space:hover .color-bar {
-    height: 12px;
-  }
-  .space.left:hover .color-bar,
-  .space.right:hover .color-bar {
-    width: 12px;
-  }
 }
