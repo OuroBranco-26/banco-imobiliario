@@ -1158,10 +1158,10 @@ function App() {
         <button
           className="roll-btn"
           onClick={handleRoll}
-          disabled={!isMyTurn || actionPrompt !== null || newsCard !== null || isMoving || isRollingDice}
-          style={{ opacity: (!isMyTurn || actionPrompt || newsCard || isMoving || isRollingDice) ? 0.5 : 1 }}
+          disabled={!isMyTurn || actionPrompt !== null || newsCard !== null || isMoving || isRollingDice || (auction && auction.active)}
+          style={{ opacity: (!isMyTurn || actionPrompt || newsCard || isMoving || isRollingDice || (auction && auction.active)) ? 0.5 : 1 }}
         >
-          {isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : !isMyTurn ? 'Aguarde...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🎲 Sair da Prisão' : 'Rolar Dados'}
+          {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : !isMyTurn ? 'Aguarde...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🎲 Sair da Prisão' : 'Rolar Dados'}
         </button>
       </div>
 
