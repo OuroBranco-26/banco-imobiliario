@@ -11,6 +11,7 @@
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   gap: 2px;
+  flex-shrink: 0;
   background: linear-gradient(145deg, #0c1524, #162033);
   border: 2px solid rgba(56,189,248,0.15);
   border-radius: 12px;
@@ -243,9 +244,13 @@
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
+  .board { 
+    min-width: 1000px; 
+    min-height: 1000px; 
+  }
   .board-logo { font-size: 2rem; letter-spacing: 2px; }
-  .space-name { font-size: 0.5rem; line-height: 1.1; }
-  .space-price { font-size: 0.45rem; }
+  .space-name { font-size: 0.6rem; line-height: 1.1; }
+  .space-price { font-size: 0.5rem; }
   .player-token { width: 12px; height: 12px; border-width: 1px; }
   .building { font-size: 0.6rem; }
   .owner-dot { width: 9px; height: 9px; }
