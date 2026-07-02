@@ -1156,46 +1156,7 @@ function App() {
 
       {/* Floating Dice Panel moved to root so position:fixed works perfectly */}
       <div className="floating-dice">
-        <div 
-          className="dice-container"
-          style={isRollingDice ? { '--roll-duration': `${isRollingDice / 1000}s` } : {}}
-        >
-          <div className={`dice-scene ${isRollingDice ? 'dice-rolling-scene' : ''}`}>
-            <div className={`dice-cube ${isRollingDice ? 'rolling' : ''}`} data-val={diceValues[0]}>
-              <div className="dice-face front"><span className="dot"></span></div>
-              <div className="dice-face back">
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-              </div>
-              <div className="dice-face right"><span className="dot"></span><span className="dot"></span></div>
-              <div className="dice-face left">
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-              </div>
-              <div className="dice-face top">
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-              </div>
-              <div className="dice-face bottom"><span className="dot"></span><span className="dot"></span><span className="dot"></span></div>
-            </div>
-          </div>
-          
-          <div className={`dice-scene ${isRollingDice ? 'dice-rolling-scene' : ''}`}>
-            <div className={`dice-cube ${isRollingDice ? 'rolling' : ''}`} data-val={diceValues[1]}>
-              <div className="dice-face front"><span className="dot"></span></div>
-              <div className="dice-face back">
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span>
-              </div>
-              <div className="dice-face right"><span className="dot"></span><span className="dot"></span></div>
-              <div className="dice-face left">
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-              </div>
-              <div className="dice-face top">
-                <span className="dot"></span><span className="dot"></span><span className="dot"></span><span className="dot"></span>
-              </div>
-              <div className="dice-face bottom"><span className="dot"></span><span className="dot"></span><span className="dot"></span></div>
-            </div>
-          </div>
-        </div>
+
 
         {diceTotal !== null && !isRollingDice && <div className="dice-total">Total: <strong>{diceTotal}</strong> casas</div>}
 
