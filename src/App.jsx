@@ -902,7 +902,7 @@ function App() {
         {/* Speed Mode Timer */}
         {speedMode && gameStarted && (
           <div className="speed-timer" style={{
-            position: 'fixed', top: 20, right: 20, zIndex: 2000,
+            position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 2000,
             background: timeLeft <= 3 ? 'rgba(239, 68, 68, 0.9)' : 'rgba(0,0,0,0.6)',
             padding: '5px 12px', borderRadius: '20px',
             color: 'white', fontWeight: 'bold', border: '1px solid rgba(255,255,255,0.2)',
