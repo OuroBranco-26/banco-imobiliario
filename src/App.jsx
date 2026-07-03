@@ -935,7 +935,6 @@ function App() {
 
       <div className="ui-section glass-panel">
         <header className="header">
-          <h1>Banco Imobiliário</h1>
           <div className="header-controls">
             {mode === 'online' && <span className="room-badge">Sala: {roomCode}</span>}
             <div className="music-controls">
@@ -961,15 +960,13 @@ function App() {
           </div>
         </header>
 
-        <div className="controls">
-          {getStatusLabel() && (
+        {getStatusLabel() && (
+          <div className="controls">
             <div className={`status-indicator ${currentPlayer.onVacation ? 'vacation' : 'jail'}`}>
               {getStatusLabel()}
             </div>
-          )}
-
-
-        </div>
+          </div>
+        )}
 
         {/* Build */}
         {buildable.length > 0 && !actionPrompt && !newsCard && isMyTurn && (
