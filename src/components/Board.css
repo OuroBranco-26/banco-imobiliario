@@ -11,11 +11,15 @@
   margin: 0 auto;
   gap: 2px;
   flex-shrink: 0 !important;
-  background: linear-gradient(145deg, #0c1524, #162033);
-  border: 2px solid rgba(56,189,248,0.15);
-  border-radius: 12px;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  background: linear-gradient(145deg, #0a111f, #1e293b);
+  border: 10px solid #0f172a;
+  outline: 2px solid rgba(56, 189, 248, 0.4);
+  outline-offset: -2px;
+  border-radius: 16px;
+  box-shadow: 
+    0 25px 70px rgba(0,0,0,0.7), 
+    inset 0 0 50px rgba(0,0,0,0.6),
+    0 0 20px rgba(56, 189, 248, 0.2);
 }
 
 .board::before {
@@ -45,20 +49,28 @@
 
 .board-logo {
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: 6rem;
   text-align: center;
-  color: var(--color-accent);
+  color: #fff;
   text-transform: uppercase;
-  letter-spacing: 10px;
+  letter-spacing: 20px;
   line-height: 1.2;
   user-select: none;
   pointer-events: none;
+  text-shadow: 
+    0 0 10px rgba(56, 189, 248, 0.6),
+    0 0 25px rgba(56, 189, 248, 0.6),
+    0 0 50px rgba(56, 189, 248, 0.8),
+    0 8px 20px rgba(0,0,0,0.8);
+}
+.board-logo .accent {
+  color: var(--color-accent);
 }
 
 /* === SPACES === */
 .space {
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,21 +82,22 @@
   top: var(--top, 0);
   left: var(--left, 0);
   padding: 5px;
-  font-size: 0.55rem;
   transition: all 0.2s ease;
   cursor: pointer;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
 }
 
 .space:hover {
-  background: rgba(30, 41, 59, 1);
-  border-color: rgba(56,189,248,0.2);
+  background: rgba(40, 52, 73, 1);
+  border-color: rgba(56,189,248,0.4);
+  box-shadow: inset 0 0 15px rgba(56,189,248,0.2), 0 0 15px rgba(56,189,248,0.4);
   z-index: 2;
 }
 
 .space.corner {
-  font-size: 0.5rem;
   justify-content: center;
-  background: rgba(20, 30, 48, 0.9);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: inset 0 0 25px rgba(0,0,0,0.8);
 }
 
 /* === COLOR BARS === */
@@ -94,7 +107,8 @@
   height: 36.75px;
   top: 0;
   left: 0;
-  opacity: 0.9;
+  opacity: 0.95;
+  box-shadow: inset 0 -3px 8px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3);
   transition: opacity 0.2s, height 0.2s, width 0.2s;
 }
 
@@ -142,20 +156,21 @@
 }
 
 .space-name {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   text-align: center;
-  color: white;
+  color: #f8fafc;
   font-weight: 700;
   line-height: 1.1;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
   margin-top: auto;
 }
 
 .space-price {
-  font-size: 0.55rem;
-  color: var(--color-success);
+  font-size: 0.65rem;
+  color: #4ade80; /* lighter green */
   font-weight: 800;
-  opacity: 0.9;
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
 
 /* === PLAYER TOKENS === */
