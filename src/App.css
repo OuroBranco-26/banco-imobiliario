@@ -16,11 +16,18 @@
   flex: 0 0 380px;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
   background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
   border-left: 1px solid rgba(56,189,248,0.1);
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
+}
+
+.ui-scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 }
 
 .ui-section::before {

@@ -934,6 +934,7 @@ function App() {
       </div>
 
       <div className="ui-section glass-panel">
+        <div className="ui-scroll-content">
         <header className="header">
           <div className="header-controls">
             {mode === 'online' && <span className="room-badge">Sala: {roomCode}</span>}
@@ -1084,6 +1085,7 @@ function App() {
 
         {/* Game Log */}
         <GameLog logs={gameLog} />
+        </div>
       </div>
 
       <NewsCardModal card={newsCard} playerName={currentPlayer.name} onClose={isMyTurn ? handleCloseNews : undefined} />
