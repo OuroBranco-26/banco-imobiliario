@@ -164,11 +164,13 @@
   bottom: 6px;
   left: 50%;
   transform: translateX(-50%);
+  width: 95%; /* Give it explicit width so left: 50% doesn't squish it */
   display: flex;
   gap: 3px;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse; /* Wrap upwards instead of downwards */
   z-index: 10;
   justify-content: center;
+  align-items: center;
 }
 
 .player-token {
