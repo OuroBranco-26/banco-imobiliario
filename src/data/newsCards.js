@@ -21,8 +21,8 @@ export const NEWS_CARDS = [
   { id: 13, text: '➡️ {player}, avance 3 casas!', effect: { type: 'moveForward', steps: 3 } },
   { id: 14, text: '⬅️ {player}, volte 3 casas!', effect: { type: 'moveBack', steps: 3 } },
   
-  // Prisão
-  { id: 15, text: '🚔 {player} foi flagrado em festa clandestina! Vá direto para a Prisão!', effect: { type: 'goToJail' } },
+  // Presídio
+  { id: 15, text: '🚔 {player} foi flagrado em festa clandestina! Vá direto para o Presídio!', effect: { type: 'goToJail' } },
   
   // Coletar de todos
   { id: 16, text: '🎂 É aniversário de {player}! Cada jogador paga $50 para ele(a).', effect: { type: 'collectFromAll', amount: 50 } },
@@ -55,9 +55,9 @@ export const NEWS_CARDS = [
   { id: 33, text: '🏃 {player} entrou na corrida de rua no Centro! Avance 5 casas.', effect: { type: 'moveForward', steps: 5 } },
   { id: 34, text: '🚧 {player}, obra na estrada! Volte 2 casas.', effect: { type: 'moveBack', steps: 2 } },
 
-  // Prisão
-  { id: 35, text: '🚨 {player} foi flagrado fazendo moto grau na Av. Minas Gerais! Vá para a Prisão!', effect: { type: 'goToJail' } },
-  { id: 36, text: '📋 Mandado de busca para {player}! Vá direto para a Prisão!', effect: { type: 'goToJail' } },
+  // Presídio
+  { id: 35, text: '🚨 {player} foi flagrado fazendo moto grau na Av. Minas Gerais! Vá para o Presídio!', effect: { type: 'goToJail' } },
+  { id: 36, text: '📋 Mandado de busca para {player}! Vá direto para o Presídio!', effect: { type: 'goToJail' } },
 
   // Coletar/Pagar a todos
   { id: 37, text: '🎄 Natal em Araguari! Cada jogador dá um presente de $30 para {player}.', effect: { type: 'collectFromAll', amount: 30 } },

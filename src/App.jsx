@@ -573,9 +573,9 @@ function App() {
       setActionPrompt({ type: 'info', message: `Pagou $${space.price} de taxas!` });
     } else if (space.type === 'go-to-jail') {
       sound.playSiren();
-      addLog('🚔', `${player.name} foi para a Prisão!`);
+      addLog('🚔', `${player.name} foi para o Presídio!`);
       setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, position: 10, inJail: true, jailTurns: 0 } : p));
-      setActionPrompt({ type: 'info', message: '🚔 Vá para a Prisão!' });
+      setActionPrompt({ type: 'info', message: '🚔 Vá para o Presídio!' });
     } else if (space.type === 'parking') {
       setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, onVacation: true } : p));
       setActionPrompt({ type: 'info', message: '🏖️ Férias! Perde a próxima rodada.' });
@@ -763,7 +763,7 @@ function App() {
     if (currentPlayer.inJail) {
       const a = currentPlayer.jailTurns;
       if (a >= 3) return '🔓 Última tentativa!';
-      return `🔒 Prisão — Tentativa ${a + 1} de 3`;
+      return `🔒 Presídio — Tentativa ${a + 1} de 3`;
     }
     if (currentPlayer.onVacation) return '🏖️ De Férias';
     return null;
@@ -1160,7 +1160,7 @@ function App() {
           disabled={!isMyTurn || actionPrompt !== null || newsCard !== null || isMoving || isRollingDice || (auction && auction.active)}
           style={{ opacity: (!isMyTurn || actionPrompt || newsCard || isMoving || isRollingDice || (auction && auction.active)) ? 0.5 : 1 }}
         >
-          {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : !isMyTurn ? 'Aguarde...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🎲 Sair da Prisão' : 'Rolar Dados'}
+          {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : !isMyTurn ? 'Aguarde...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🎲 Sair do Presídio' : 'Rolar Dados'}
         </button>
       </div>
 
