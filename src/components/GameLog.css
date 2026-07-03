@@ -61,14 +61,14 @@
 
 .game-log__body {
   max-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
   transition: max-height 0.35s ease, padding 0.35s ease;
   padding: 0 14px;
 }
 
 /* Expanded state */
 .game-log--expanded .game-log__body {
-  max-height: 250px;
+  max-height: 2000px;
   padding: 0 14px 10px;
 }
 

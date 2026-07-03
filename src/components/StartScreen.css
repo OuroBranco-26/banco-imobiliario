@@ -93,6 +93,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
   animation: slideIn 0.4s ease-out;
 }
 
@@ -112,6 +113,7 @@
 
 .name-input {
   flex: 1;
+  min-width: 150px;
   padding: 0.5rem 0.8rem;
   background: rgba(255,255,255,0.08);
   border: 1px solid var(--glass-border);
@@ -214,5 +216,4 @@
 @media (max-width: 500px) {
   .start-container { padding: 1.5rem; }
   .start-title { font-size: 2rem; }
-  .color-picker { display: none; }
 }
