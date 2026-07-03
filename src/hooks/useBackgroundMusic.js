@@ -8,7 +8,7 @@ import { useRef, useState, useCallback } from 'react';
  *   2. Altere o MUSIC_FILE abaixo para o nome do seu arquivo
  *   Ex: const MUSIC_FILE = '/minha_musica.mp3';
  */
-const MUSIC_FILE = '/Fundo Banco imobiliario Araguari.webm';
+const MUSIC_FILE = '/Fundo Banco imobiliario.webm';
 
 export default function useBackgroundMusic() {
   const audioRef = useRef(null);
