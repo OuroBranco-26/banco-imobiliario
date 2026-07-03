@@ -155,3 +155,22 @@
 .tutorial-btn:active {
   transform: translateY(0);
 }
+
+/* Compact Landscape Mode */
+@media (max-height: 450px) and (orientation: landscape) {
+  .tutorial-modal {
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+  .tutorial-header { padding: 10px; }
+  .tutorial-header h2 { font-size: 1.2rem; margin-bottom: 2px; }
+  .tutorial-header p { font-size: 0.8rem; }
+  .tutorial-content { padding: 10px; }
+  .tutorial-tabs { margin-bottom: 10px; padding-bottom: 2px; }
+  .tutorial-tab { padding: 5px 12px; font-size: 0.8rem; }
+  .tutorial-body { min-height: 100px; padding: 10px; }
+  .tutorial-icon-large { font-size: 2rem; margin-bottom: 5px; }
+  .tutorial-text { font-size: 0.9rem; }
+  .tutorial-footer { padding: 10px; }
+  .tutorial-btn { padding: 8px 16px; font-size: 1rem; }
+}
