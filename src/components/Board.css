@@ -43,8 +43,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(ellipse at center, rgba(56,189,248,0.06) 0%, transparent 70%);
-  border-radius: 4px;
+  background: radial-gradient(ellipse at center, rgba(56,189,248,0.1) 0%, transparent 70%);
+  border-radius: 8px;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
 }
 
 .board-logo {
