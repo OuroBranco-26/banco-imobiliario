@@ -70,18 +70,7 @@ body {
   min-height: 0;
 }
 
-/* Force Landscape on Mobile Portrait */
-@media screen and (orientation: portrait) {
-  #root {
-    transform: rotate(-90deg);
-    transform-origin: left top;
-    width: 100vh;
-    height: 100vw;
-    position: absolute;
-    top: 100vh;
-    left: 0;
-  }
-}
+/* Remove portrait hack, just use normal column layout */
 
 /* Real Landscape on Mobile */
 @media screen and (orientation: landscape) {
