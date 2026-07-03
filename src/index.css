@@ -60,7 +60,7 @@ body {
 /* Responsive Layout */
 .app-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
   width: 100%;
   padding: 1rem;
@@ -83,9 +83,17 @@ body {
   }
 }
 
+/* Real Landscape on Mobile */
+@media screen and (orientation: landscape) {
+  .app-container {
+    flex-direction: row;
+  }
+}
+
 /* Desktop layout: adjust padding */
 @media (min-width: 1024px) {
   .app-container {
+    flex-direction: row;
     padding: 2rem;
   }
 }
