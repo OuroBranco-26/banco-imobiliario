@@ -113,7 +113,7 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
   return (
     <div className="board">
       <div className="board-center">
-        <h1 className="board-logo">BANCO<br/>IMOBILIÁRIO</h1>
+        <h1 className="board-logo">BANCO<br/>IMOBILIÁRIO<div style={{fontSize: '14px', color: 'red'}}>VER 3.0</div></h1>
       </div>
       {BOARD_SPACES.map(renderSpace)}
     </div>
