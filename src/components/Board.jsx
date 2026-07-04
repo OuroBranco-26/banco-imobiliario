@@ -25,24 +25,29 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
   };
 
   const renderSpace = (space) => {
-    let gridRow, gridColumn;
+    let top = 'auto';
+    let left = 'auto';
+    let right = 'auto';
+    let bottom = 'auto';
     let spaceClass = 'space ';
     
+    const step = 100 / 11; // Porcentagem exata
+    
     if (space.id >= 20 && space.id <= 30) {
-      gridRow = 1;
-      gridColumn = space.id - 19;
+      top = '0%';
+      left = `${(space.id - 20) * step}%`;
       spaceClass += 'top';
     } else if (space.id >= 31 && space.id <= 39) {
-      gridRow = space.id - 29;
-      gridColumn = 11;
+      top = `${(space.id - 30) * step}%`;
+      right = '0%';
       spaceClass += 'right';
     } else if (space.id >= 0 && space.id <= 10) {
-      gridRow = 11;
-      gridColumn = 11 - space.id;
+      bottom = '0%';
+      left = `${(10 - space.id) * step}%`;
       spaceClass += 'bottom';
     } else if (space.id >= 11 && space.id <= 19) {
-      gridRow = 21 - space.id;
-      gridColumn = 1;
+      top = `${(20 - space.id) * step}%`;
+      left = '0%';
       spaceClass += 'left';
     }
 
@@ -62,7 +67,7 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
       <div 
         key={space.id} 
         className={spaceClass} 
-        style={{ gridRow, gridColumn }}
+        style={{ top, left, right, bottom }}
         onClick={() => {
           if (typeof handleSpaceClick === 'function') handleSpaceClick(space.id);
         }}
