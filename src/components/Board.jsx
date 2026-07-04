@@ -49,7 +49,11 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
       spaceClass += 'left';
     }
 
-    if (space.id % 10 === 0) spaceClass += ' corner';
+    if (space.id === 20) spaceClass += ' corner top-left';
+    else if (space.id === 30) spaceClass += ' corner top-right';
+    else if (space.id === 0) spaceClass += ' corner bottom-right';
+    else if (space.id === 10) spaceClass += ' corner bottom-left';
+    
     if (mortgaged[space.id]) spaceClass += ' mortgaged';
     
     const ownerId = ownership[space.id];
