@@ -860,7 +860,7 @@ function App() {
             <div><strong>Jogo em Rede</strong><br/><small>Via WiFi, até 6 jogadores</small></div>
           </button>
           <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
-            Versão Atual (1.2.9) - 02/07/2026
+            Versão Atual 1.3.0 (03/07/2026)
           </div>
         </div>
       </div>
