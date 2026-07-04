@@ -249,3 +249,61 @@
   }
 }
 
+
+.local-bidders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.local-bidder-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.bidder-info {
+  font-weight: bold;
+  font-size: 1rem;
+}
+.bidder-controls {
+  display: flex;
+  gap: 6px;
+}
+.btn-bid.small {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+.btn-withdraw.small {
+  padding: 6px;
+  font-size: 0.85rem;
+}
+
+@media screen and (max-height: 500px) {
+  .local-bidders-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+  }
+  .local-bidder-row {
+    padding: 4px 6px;
+    flex-direction: column;
+    gap: 4px;
+    width: 48%;
+  }
+  .bidder-controls {
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-bid.small {
+    padding: 4px 6px;
+    font-size: 0.75rem;
+  }
+  .btn-withdraw.small {
+    padding: 4px 6px;
+    font-size: 0.75rem;
+  }
+}
+

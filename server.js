@@ -337,6 +337,7 @@ io.on('connection', (socket) => {
         gs.players.find(p => p.id === ownerId).money += rent;
         const ownerName = gs.players.find(p => p.id === ownerId).name;
         gs.actionPrompt = { type: 'info', message: `Pagou $${rent} de aluguel para ${ownerName}!` };
+        io.to(room.code || gs.roomCode).emit('playEffect', { type: 'coin-loss', target: null });
       } else {
         nextTurn(gs);
       }
@@ -346,6 +347,7 @@ io.on('connection', (socket) => {
     } else if (type === 'go-to-jail') {
       player.position = 10; player.inJail = true; player.jailTurns = 0;
       gs.actionPrompt = { type: 'info', message: '🚔 Vá direto para a Prisão!' };
+      io.to(room.code || gs.roomCode).emit('playEffect', { type: 'siren', target: null });
     } else if (type === 'parking') {
       player.onVacation = true;
       gs.actionPrompt = { type: 'info', message: '🏖️ Férias! Perde a próxima rodada.' };
@@ -354,6 +356,7 @@ io.on('connection', (socket) => {
       if (idx >= gs.newsDeck.length) { gs.newsDeck = shuffleDeck(NEWS_CARDS); idx = 0; }
       gs.newsCard = gs.newsDeck[idx];
       gs.newsDeckIndex = idx + 1;
+      io.to(room.code || gs.roomCode).emit('playEffect', { type: 'paper', target: null });
     } else {
       const msg = passedGo ? 'Passou pelo Início e recebeu $500!' : null;
       if (msg) gs.actionPrompt = { type: 'info', message: msg };
@@ -386,6 +389,7 @@ io.on('connection', (socket) => {
     gs.ownership[spaceId] = player.id;
     nextTurn(gs);
     io.to(code).emit('gameUpdate', getFullGameState(room));
+    io.to(code).emit('playEffect', { type: 'kaching', target: null });
   });
 
   socket.on('skipBuy', ({ code }) => {
@@ -477,6 +481,7 @@ io.on('connection', (socket) => {
     gs.buildings[spaceId] = current + 1;
     player.money -= cost;
     io.to(code).emit('gameUpdate', getFullGameState(room));
+    io.to(code).emit('playEffect', { type: 'build-dust', target: { spaceId } });
   });
 
   socket.on('mortgage', ({ code, spaceId }) => {
@@ -549,6 +554,7 @@ io.on('connection', (socket) => {
     gs.log.push({ id: Date.now(), icon: '🤝', message: `Troca entre ${from.name} e ${to.name}!`, timestamp: Date.now() });
 
     io.to(code).emit('gameUpdate', getFullGameState(room));
+    io.to(code).emit('playEffect', { type: 'trade', target: null });
   });
 
   socket.on('rejectTrade', ({ code, trade }) => {
