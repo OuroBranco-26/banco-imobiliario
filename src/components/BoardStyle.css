@@ -4,6 +4,9 @@
 
 .board {
   position: relative;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(11, 1fr);
   width: 1200px !important;
   min-width: 1200px !important;
   height: 1200px !important;
@@ -11,7 +14,7 @@
   margin: 0 auto;
   padding: 0 !important;
   flex-shrink: 0 !important;
-  background: #1e293b !important;
+  background: linear-gradient(145deg, #0a111f, #1e293b) !important;
   border: none !important;
   outline: 2px solid rgba(56, 189, 248, 0.8); /* Borda fina e neon */
   outline-offset: -2px;
@@ -35,17 +38,15 @@
 }
 
 .board-center {
-  position: absolute;
-  top: calc(100% / 11);
-  left: calc(100% / 11);
-  width: calc(100% * 9 / 11);
-  height: calc(100% * 9 / 11);
+  grid-area: 2 / 2 / 11 / 11;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(ellipse at center, rgba(56,189,248,0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(15,23,42,0.4) 0%, rgba(2,6,23,0.95) 100%);
   border-radius: 8px;
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+  pointer-events: none;
+  z-index: 5;
 }
 
 .board-logo {
@@ -70,18 +71,16 @@
 
 /* === SPACES === */
 .space {
-  background: transparent !important;
+  background: rgba(30, 41, 59, 0.85) !important;
   border: 1px solid rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: relative;
   overflow: hidden;
-  width: calc(100% / 11);
-  height: calc(100% / 11);
-  top: var(--top, 0);
-  left: var(--left, 0);
+  width: 100%;
+  height: 100%;
   padding: 5px;
   margin: 0 !important;
   transition: all 0.2s ease;
