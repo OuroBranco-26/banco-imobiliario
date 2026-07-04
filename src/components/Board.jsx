@@ -29,7 +29,7 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
     let left = '';
     let spaceClass = 'space ';
     
-    const step = 1200 / 11;
+    const step = 1196 / 11;
     
     if (space.id >= 20 && space.id <= 30) {
       top = '0px';

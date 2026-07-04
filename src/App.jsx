@@ -913,7 +913,7 @@ function App() {
           </div>
         )}
 
-        <div style={{ minWidth: '1200px', minHeight: '1200px', width: '1200px', height: '1200px', flexShrink: 0, position: 'relative' }}>
+        <div className="board-outer-wrapper">
           <Board players={players} ownership={ownership} buildings={buildings} mortgaged={mortgaged} />
         </div>
         

@@ -10,6 +10,24 @@
   align-items: flex-start;
   overflow: auto;
   padding: 1rem;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.board-section::-webkit-scrollbar {
+  display: none;
+}
+
+.board-outer-wrapper {
+  min-width: 1200px;
+  min-height: 1200px;
+  width: 1200px;
+  height: 1200px;
+  flex-shrink: 0;
+  position: relative;
+  border: 2px solid rgba(56, 189, 248, 0.8);
+  border-radius: 18px;
+  background: #0f172a;
 }
 
 .ui-section {
