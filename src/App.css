@@ -25,9 +25,12 @@
   height: 1200px;
   flex-shrink: 0;
   position: relative;
-  border: 2px solid rgba(56, 189, 248, 0.8);
+  border: 2px solid rgba(56, 189, 248, 0.9);
   border-radius: 18px;
   background: #0f172a;
+  box-shadow: 
+    0 0 25px rgba(56, 189, 248, 0.5),      /* Brilho externo neon */
+    inset 0 0 15px rgba(56, 189, 248, 0.3); /* Brilho interno neon (polida) */
 }
 
 .ui-section {
