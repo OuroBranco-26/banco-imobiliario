@@ -1,5 +1,5 @@
 import { BOARD_SPACES, BOARD_COLORS } from '../data/boardData';
-import './Board.css';
+import './BoardStyle.css';
 
 const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffects = [] }) => {
   
