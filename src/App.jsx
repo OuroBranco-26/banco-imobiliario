@@ -1185,28 +1185,18 @@ function App() {
 
       {/* Floating Dice Panel moved to root so position:fixed works perfectly */}
       <div className="floating-dice">
-        <div className="dice-container" style={{ '--player-color': currentPlayer.color }}>
-          <div className="dice-wrapper">
-            <div className={`dice ${isRollingDice ? 'rolling' : ''}`} style={dice1Style}>
-              <div className="dice-face front"></div><div className="dice-face back"></div><div className="dice-face right"></div><div className="dice-face left"></div><div className="dice-face top"></div><div className="dice-face bottom"></div>
-            </div>
-            <div className={`dice ${isRollingDice ? 'rolling' : ''}`} style={dice2Style}>
-              <div className="dice-face front"></div><div className="dice-face back"></div><div className="dice-face right"></div><div className="dice-face left"></div><div className="dice-face top"></div><div className="dice-face bottom"></div>
-            </div>
-          </div>
-          {diceTotal !== null && !isRollingDice && <div className="dice-total">Total: <strong>{diceTotal}</strong> casas</div>}
+        {diceTotal !== null && !isRollingDice && <div className="dice-total">Total: <strong>{diceTotal}</strong> casas</div>}
 
-          {isMyTurn && (
-            <button
-              className="roll-btn"
-              onClick={handleRoll}
-              disabled={actionPrompt !== null || newsCard !== null || isMoving || isRollingDice || (auction && auction.active)}
-              style={{ opacity: (actionPrompt || newsCard || isMoving || isRollingDice || (auction && auction.active)) ? 0.5 : 1 }}
-            >
-              {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🚓 Sair do Presídio' : 'Rolar Dados'}
-            </button>
-          )}
-        </div>
+        {isMyTurn && (
+          <button
+            className="roll-btn"
+            onClick={handleRoll}
+            disabled={actionPrompt !== null || newsCard !== null || isMoving || isRollingDice || (auction && auction.active)}
+            style={{ opacity: (actionPrompt || newsCard || isMoving || isRollingDice || (auction && auction.active)) ? 0.5 : 1 }}
+          >
+            {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🚓 Sair do Presídio' : 'Rolar Dados'}
+          </button>
+        )}
       </div>
 
     </div>
