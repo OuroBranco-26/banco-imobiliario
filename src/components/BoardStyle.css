@@ -11,8 +11,10 @@
   margin: 0 auto;
   padding: 0 !important;
   flex-shrink: 0 !important;
-  background: linear-gradient(145deg, #0a111f, #1e293b);
-  border: 2px solid rgba(56, 189, 248, 0.8); /* Borda fina e neon */
+  background: #1e293b !important;
+  border: none !important;
+  outline: 2px solid rgba(56, 189, 248, 0.8); /* Borda fina e neon */
+  outline-offset: -2px;
   border-radius: 16px;
   overflow: hidden; /* Mantém o corte suave dos cantos */
   box-shadow: 
@@ -68,7 +70,7 @@
 
 /* === SPACES === */
 .space {
-  background: rgba(30, 41, 59, 0.85);
+  background: transparent !important;
   border: 1px solid rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
