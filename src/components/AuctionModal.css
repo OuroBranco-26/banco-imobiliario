@@ -205,3 +205,47 @@
   font-size: 0.9rem;
   font-style: italic;
 }
+
+@media screen and (max-height: 600px) {
+  .auction-card {
+    padding: 0.8rem;
+    gap: 0.5rem;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+  .auction-header {
+    padding-bottom: 0.5rem;
+  }
+  .auction-header h2 {
+    font-size: 1.2rem;
+  }
+  .auction-content {
+    gap: 0.5rem;
+  }
+  .auction-property {
+    padding: 0.5rem;
+  }
+  .auction-property h3 {
+    margin-top: 5px;
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+  .auction-status {
+    padding: 0.5rem;
+  }
+  .bid-amount {
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+  }
+  .btn-bid {
+    padding: 8px 0;
+    font-size: 1rem;
+  }
+  .btn-withdraw {
+    padding: 6px;
+  }
+  .auction-actions {
+    gap: 0.5rem;
+  }
+}
+

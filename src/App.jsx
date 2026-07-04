@@ -149,21 +149,35 @@ function App() {
 
   // Simulate dice rolling visual effect
   const simulateDiceRoll = async (duration = 3000) => {
-    setIsRollingDice(duration); // Store duration for CSS variable
-    const loops = duration / 100;
-    for (let i = 0; i < loops; i++) {
-      setDiceValues([Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1]);
-      await wait(100);
-    }
-    setIsRollingDice(false);
+  const simulateDiceRoll = (duration) => {
+    return new Promise(resolve => {
+      sound.playDiceRoll();
+      setIsRollingDice(true);
+      setTimeout(() => {
+        setIsRollingDice(false);
+        resolve();
+      }, duration);
+    });
   };
 
   const triggerEffect = (type, target, broadcast = false) => {
-    const id = Date.now() + Math.random();
-    setVisualEffects(prev => [...prev, { id, type, ...target }]);
-    setTimeout(() => {
-      setVisualEffects(prev => prev.filter(e => e.id !== id));
-    }, 1500);
+    if (type === 'coin-loss' || type === 'coin-gain') sound.playCoinDrop();
+    else if (type === 'build-dust') sound.playHammer();
+    else if (type === 'kaching') sound.playKaChing();
+    else if (type === 'siren') sound.playSiren();
+    else if (type === 'jackpot') sound.playJackpot();
+    else if (type === 'bankrupt') sound.playBankrupt();
+    else if (type === 'victory') sound.playVictory();
+    else if (type === 'paper') sound.playPaperFlip();
+    else if (type === 'trade') sound.playTrade();
+
+    if (['coin-loss', 'coin-gain', 'build-dust'].includes(type)) {
+      const id = Date.now() + Math.random();
+      setVisualEffects(prev => [...prev, { id, type, ...target }]);
+      setTimeout(() => {
+        setVisualEffects(prev => prev.filter(e => e.id !== id));
+      }, 1500);
+    }
     
     if (broadcast && mode === 'online' && socketRef.current) {
       socketRef.current.emit('broadcastEffect', { code: roomCode, type, target });
@@ -336,7 +350,7 @@ function App() {
     if (canMortgage) return updatedPlayers; // Player can still mortgage
 
     // Bankrupt!
-    sound.playBankrupt();
+    triggerEffect('bankrupt', null, true);
     addLog('💀', `${p.name} foi à falência!`);
     
     // Transfer all properties
@@ -361,7 +375,7 @@ function App() {
     const alive = result.filter(pl => !pl.bankrupt);
     if (alive.length === 1) {
       setTimeout(() => {
-        sound.playVictory();
+        triggerEffect('victory', null, true);
         setWinner(alive[0]);
       }, 500);
     }
@@ -483,7 +497,7 @@ function App() {
         const updated = { ...p, position: newPos };
         if (newPos === 0) {
           updated.money = p.money + 500;
-          sound.playJackpot();
+          triggerEffect('jackpot', null, true);
         }
         return updated;
       }));
@@ -504,7 +518,6 @@ function App() {
     }
 
     const duration = Math.floor(Math.random() * 3000) + 1000;
-    sound.playDiceRoll();
     await simulateDiceRoll(duration);
 
     const d1 = Math.floor(Math.random() * 6) + 1;
@@ -559,7 +572,6 @@ function App() {
         setActionPrompt({ type: 'buy', space, player, spaceId: space.id, price: space.price, canAfford: player.money >= space.price });
       } else if (ownerId !== player.id) {
         const rent = calculateRentLocal(space, dt);
-        sound.playCoinDrop();
         triggerEffect('coin-loss', { playerId: player.id }, true);
         triggerEffect('coin-gain', { playerId: ownerId }, true);
         setPlayers(prev => {
@@ -582,15 +594,15 @@ function App() {
       addLog('💰', `${player.name} pagou $${space.price} de taxas`);
       setActionPrompt({ type: 'info', message: `Pagou $${space.price} de taxas!` });
     } else if (space.type === 'go-to-jail') {
-      sound.playSiren();
-      addLog('🚔', `${player.name} foi para o Presídio!`);
+      triggerEffect('siren', null, true);
+      addLog('🚓', `${player.name} foi para o Presídio!`);
       setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, position: 10, inJail: true, jailTurns: 0 } : p));
       setActionPrompt({ type: 'info', message: '🚔 Vá para o Presídio!' });
     } else if (space.type === 'parking') {
       setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, onVacation: true } : p));
       setActionPrompt({ type: 'info', message: '🏖️ Férias! Perde a próxima rodada.' });
     } else if (space.type === 'chance') {
-      sound.playPaperFlip();
+      triggerEffect('paper', null, true);
       let idx = newsDeckIndex;
       if (idx >= newsDeck.length) { setNewsDeck(shuffleDeck(NEWS_CARDS)); idx = 0; }
       setNewsCard(newsDeck[idx]);
@@ -604,8 +616,8 @@ function App() {
   const buyPropertyLocal = () => {
     if (!actionPrompt || actionPrompt.type !== 'buy') return;
     const { space, player } = actionPrompt;
-    sound.playKaChing();
-    addLog('🏠', `${player.name} comprou ${space.name} por $${space.price}`);
+    triggerEffect('kaching', null, true);
+    addLog('💰', `${player.name} comprou ${space.name} por $${space.price}`);
     setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, money: p.money - space.price } : p));
     setOwnership(prev => ({ ...prev, [space.id]: player.id }));
     nextTurnLocal();
@@ -650,7 +662,6 @@ function App() {
   const buildLocal = (spaceId) => {
     const space = BOARD_SPACES.find(s => s.id === spaceId);
     if (!canBuildLocal(spaceId)) return;
-    sound.playHammer();
     triggerEffect('build-dust', { spaceId }, true);
     addLog('🔨', `${currentPlayer.name} construiu em ${space.name}`);
     setBuildings(prev => ({ ...prev, [spaceId]: (prev[spaceId] || 0) + 1 }));
@@ -706,7 +717,7 @@ function App() {
   const handleTradeAccept = () => {
     if (!incomingTrade) return;
     const t = incomingTrade;
-    sound.playTrade();
+    triggerEffect('trade', null, true);
     addLog('🤝', `Troca aceita entre jogadores!`);
     
     // Transfer money
