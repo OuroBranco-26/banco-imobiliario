@@ -171,16 +171,17 @@ function App() {
   };
 
   useEffect(() => {
-    if (mode === 'online' && socketRef.current) {
-      socketRef.current.on('gameUpdate', applyServerState);
-      socketRef.current.on('animateMovement', handleAnimateMovement);
-      socketRef.current.on('diceRolling', ({ duration }) => simulateDiceRoll(duration));
-      socketRef.current.on('playEffect', ({ type, target }) => triggerEffect(type, target, false));
+    const socket = socketRef.current;
+    if (mode === 'online' && socket) {
+      socket.on('gameUpdate', applyServerState);
+      socket.on('animateMovement', handleAnimateMovement);
+      socket.on('diceRolling', ({ duration }) => simulateDiceRoll(duration));
+      socket.on('playEffect', ({ type, target }) => triggerEffect(type, target, false));
       return () => {
-        socketRef.current.off('gameUpdate', applyServerState);
-        socketRef.current.off('animateMovement', handleAnimateMovement);
-        socketRef.current.off('diceRolling');
-        socketRef.current.off('playEffect');
+        socket.off('gameUpdate', applyServerState);
+        socket.off('animateMovement', handleAnimateMovement);
+        socket.off('diceRolling');
+        socket.off('playEffect');
       };
     }
   }, [mode]);
