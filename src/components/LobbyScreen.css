@@ -154,3 +154,29 @@
   .lobby-title { font-size: 2rem; }
   .code-value { font-size: 2rem; letter-spacing: 8px; }
 }
+
+/* Compact Landscape for Lobby Screen */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .lobby-container {
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 650px;
+  }
+  .lobby-header { width: 100%; margin-bottom: 0; }
+  .lobby-title { font-size: 1.5rem; letter-spacing: 2px; }
+  .lobby-subtitle { display: none; }
+  .lobby-section { width: 48%; gap: 0.4rem; }
+  .menu-buttons { width: 48%; gap: 0.4rem; justify-content: flex-start; }
+  .input-group { gap: 0.2rem; }
+  .lobby-input, .lobby-btn { padding: 0.5rem; font-size: 0.9rem; }
+  .code-input { font-size: 1.2rem; letter-spacing: 4px; }
+  .room-code-display { padding: 0.5rem; }
+  .code-value { font-size: 1.5rem; letter-spacing: 4px; }
+  .waiting-players { width: 100%; display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+  .waiting-player { width: 48%; padding: 0.4rem; margin-bottom: 0; }
+  .color-option, .avatar-option { width: 28px; height: 28px; font-size: 1rem; }
+}
+

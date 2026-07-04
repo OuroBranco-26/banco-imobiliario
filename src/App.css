@@ -852,3 +852,24 @@
 }
  
  
+/* Compact Landscape for Mode Screen */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .mode-container {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+  .mode-title {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+  }
+  .mode-subtitle {
+    font-size: 0.9rem;
+  }
+  .mode-btn {
+    padding: 0.6rem 1rem;
+  }
+  .mode-icon {
+    font-size: 1.8rem;
+  }
+}
+
