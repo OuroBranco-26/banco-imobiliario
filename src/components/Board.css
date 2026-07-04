@@ -12,13 +12,10 @@
   gap: 2px;
   flex-shrink: 0 !important;
   background: linear-gradient(145deg, #0a111f, #1e293b);
-  border: 4px solid #1e293b; /* Borda interna fina */
-  border-radius: 20px;
-  overflow: hidden; /* Corta as quinas das casas para seguir o arredondamento */
+  border-radius: 16px;
+  overflow: hidden; /* Mantém o corte suave dos cantos */
   box-shadow: 
-    0 0 0 12px #0a111f, /* Moldura grossa externa escura */
-    0 0 0 14px rgba(56, 189, 248, 0.6), /* Fio de neon azul por fora da moldura */
-    0 30px 80px 15px rgba(0,0,0,0.8), /* Sombra projetada massiva */
+    0 25px 70px 15px rgba(0,0,0,0.8), /* Sombra projetada para flutuar */
     inset 0 0 80px rgba(0,0,0,0.8); /* Sombra interna para profundidade */
 }
 
