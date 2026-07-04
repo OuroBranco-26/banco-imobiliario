@@ -29,23 +29,23 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
     let left = '';
     let spaceClass = 'space ';
     
-    const step = 100 / 11;
+    const step = 1200 / 11;
     
     if (space.id >= 20 && space.id <= 30) {
-      top = '0%';
-      left = `${(space.id - 20) * step}%`;
+      top = '0px';
+      left = `${(space.id - 20) * step}px`;
       spaceClass += 'top';
     } else if (space.id >= 31 && space.id <= 39) {
-      top = `${(space.id - 30) * step}%`;
-      left = `${10 * step}%`;
+      top = `${(space.id - 30) * step}px`;
+      left = `${10 * step}px`;
       spaceClass += 'right';
     } else if (space.id >= 0 && space.id <= 10) {
-      top = `${10 * step}%`;
-      left = `${(10 - space.id) * step}%`;
+      top = `${10 * step}px`;
+      left = `${(10 - space.id) * step}px`;
       spaceClass += 'bottom';
     } else if (space.id >= 11 && space.id <= 19) {
-      top = `${(20 - space.id) * step}%`;
-      left = '0%';
+      top = `${(20 - space.id) * step}px`;
+      left = '0px';
       spaceClass += 'left';
     }
 
@@ -61,7 +61,8 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
       <div 
         key={space.id} 
         className={spaceClass} 
-        style={{ top, left }}
+        style={{ top, left, width: `${step}px`, height: `${step}px` }}
+        onClick={() => handleSpaceClick(space.id)}
       >
         {visualEffects.filter(e => e.spaceId === space.id).map(e => (
           <div key={e.id} className="effect-container">
