@@ -19,7 +19,7 @@ const PLAYER_AVATARS = [
   { name: 'Chave', emoji: '🔑' },
 ];
 
-const LobbyScreen = ({ socket, onGameStart }) => {
+const LobbyScreen = ({ socket, onGameStart, onBack }) => {
   const [screen, setScreen] = useState('menu'); // menu, create, join, waiting
   const [name, setName] = useState('');
   const [color, setColor] = useState(PLAYER_COLORS[0].value);
@@ -67,6 +67,27 @@ const LobbyScreen = ({ socket, onGameStart }) => {
 
   return (
     <div className="lobby-screen">
+      {screen === 'menu' && (
+        <button 
+          onClick={onBack}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '8px',
+            color: 'white',
+            padding: '8px 16px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            zIndex: 100
+          }}
+        >
+          ⬅ Voltar ao Menu
+        </button>
+      )}
       <div className="lobby-container glass-panel">
         <div className="lobby-header">
           <h1 className="lobby-title">BANCO</h1>

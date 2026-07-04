@@ -19,7 +19,7 @@ const PLAYER_AVATARS = [
   { name: 'Chave', emoji: '🔑' },
 ];
 
-const StartScreen = ({ onStartGame }) => {
+const StartScreen = ({ onStartGame, onBack }) => {
   const [numPlayers, setNumPlayers] = useState(2);
   const [playerNames, setPlayerNames] = useState(['', '', '', '']);
   const [playerColors, setPlayerColors] = useState([
@@ -77,6 +77,25 @@ const StartScreen = ({ onStartGame }) => {
 
   return (
     <div className="start-screen">
+      <button 
+          onClick={onBack}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '8px',
+            color: 'white',
+            padding: '8px 16px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            zIndex: 100
+          }}
+        >
+          ⬅ Voltar ao Menu
+        </button>
       <div className="start-container glass-panel">
         <div className="start-header">
           <h1 className="start-title">BANCO</h1>

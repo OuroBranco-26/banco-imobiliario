@@ -310,6 +310,15 @@ function App() {
     if (m === 'online') connectSocket();
   };
 
+  const handleBackToMenu = () => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current = null;
+    }
+    setMode(null);
+    setGameStarted(false);
+  };
+
   // === LOCAL: GAME LOGIC ===
   const addLog = (icon, message) => {
     setGameLog(prev => [...prev.slice(-29), { id: Date.now() + Math.random(), icon, message, timestamp: Date.now() }]);
@@ -869,12 +878,12 @@ function App() {
 
   // Local start screen
   if (mode === 'local' && !gameStarted) {
-    return <StartScreen onStartGame={handleStartLocal} />;
+    return <StartScreen onStartGame={handleStartLocal} onBack={handleBackToMenu} />;
   }
 
   // Online lobby
   if (mode === 'online' && !gameStarted) {
-    return <LobbyScreen socket={socketRef.current} onGameStart={handleOnlineGameStart} />;
+    return <LobbyScreen socket={socketRef.current} onGameStart={handleOnlineGameStart} onBack={handleBackToMenu} />;
   }
 
   // === GAME SCREEN ===
@@ -935,31 +944,56 @@ function App() {
 
       <div className="ui-section glass-panel">
         <div className="ui-scroll-content">
-        <header className="header">
-          <div className="header-controls">
-            {mode === 'online' && <span className="room-badge">Sala: {roomCode}</span>}
-            <div className="music-controls">
-              <button 
-                className={`music-btn ${music.isPlaying ? 'playing' : ''}`}
-                onClick={music.toggle}
-                title={music.isPlaying ? 'Pausar música' : 'Tocar música'}
-              >
-                {music.isPlaying ? '🔊' : '🔇'}
-              </button>
-              {music.isPlaying && (
-                <input
-                  type="range"
-                  className="volume-slider"
-                  min="0"
-                  max="100"
-                  value={Math.round(music.volume * 100)}
-                  onChange={e => music.setVolume(Number(e.target.value) / 100)}
-                  title={`Volume: ${Math.round(music.volume * 100)}%`}
-                />
-              )}
+          <header className="header">
+            <div className="header-controls">
+              {mode === 'online' && <span className="room-badge">Sala: {roomCode}</span>}
+              <div className="music-controls">
+                <button 
+                  className={`music-btn ${music.isPlaying ? 'playing' : ''}`}
+                  onClick={music.toggle}
+                  title={music.isPlaying ? 'Pausar música' : 'Tocar música'}
+                >
+                  {music.isPlaying ? '🎵' : '🔇'}
+                </button>
+                {music.isPlaying && (
+                  <input
+                    type="range"
+                    className="volume-slider"
+                    min="0"
+                    max="100"
+                    value={Math.round(music.volume * 100)}
+                    onChange={e => music.setVolume(Number(e.target.value) / 100)}
+                    title={`Volume: ${Math.round(music.volume * 100)}%`}
+                  />
+                )}
+                <button 
+                  className="disconnect-btn"
+                  onClick={() => {
+                    if (window.confirm('Tem certeza que deseja sair do jogo?')) {
+                      handleBackToMenu();
+                    }
+                  }}
+                  title="Desconectar / Voltar ao Menu"
+                  style={{
+                    background: 'rgba(239, 68, 68, 0.8)',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '20px',
+                    color: 'white',
+                    padding: '4px 10px',
+                    cursor: 'pointer',
+                    marginLeft: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  🚪 Sair
+                </button>
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
         {getStatusLabel() && (
           <div className="controls">
