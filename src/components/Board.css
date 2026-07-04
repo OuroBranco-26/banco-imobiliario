@@ -12,13 +12,12 @@
   gap: 2px;
   flex-shrink: 0 !important;
   background: linear-gradient(145deg, #0a111f, #1e293b);
-  border: 2px solid rgba(56, 189, 248, 0.5); /* Borda fina e neon */
+  border: 2px solid rgba(56, 189, 248, 0.6); /* Borda fina e neon */
   border-radius: 16px;
   overflow: hidden; /* Mantém o corte suave dos cantos */
   box-shadow: 
-    0 0 15px rgba(56, 189, 248, 0.4), /* Brilho em volta da borda fina */
-    0 25px 70px 15px rgba(0,0,0,0.8), /* Sombra projetada para flutuar */
-    inset 0 0 80px rgba(0,0,0,0.8); /* Sombra interna para profundidade */
+    0 0 20px rgba(56, 189, 248, 0.4), /* Brilho neon sutil colado na borda */
+    0 25px 70px 15px rgba(0,0,0,0.8); /* Sombra projetada massiva sem sombra interna! */
 }
 
 .board::before {
