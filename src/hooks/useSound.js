@@ -307,6 +307,7 @@ export default function useSound() {
   // Public API
   // ---------------------------------------------------------------------------
   return {
+    initAudio: getCtx,
     playDiceRoll,
     playKaChing,
     playCoinDrop,

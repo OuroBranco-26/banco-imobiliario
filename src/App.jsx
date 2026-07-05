@@ -56,6 +56,21 @@ function App() {
   const sound = useSound();
   const music = useBackgroundMusic();
 
+  // Initialize Web Audio API on first user interaction so WebSockets can play sounds
+  useEffect(() => {
+    const initAudioContext = () => {
+      sound.initAudio();
+      document.removeEventListener('pointerdown', initAudioContext);
+      document.removeEventListener('keydown', initAudioContext);
+    };
+    document.addEventListener('pointerdown', initAudioContext);
+    document.addEventListener('keydown', initAudioContext);
+    return () => {
+      document.removeEventListener('pointerdown', initAudioContext);
+      document.removeEventListener('keydown', initAudioContext);
+    };
+  }, [sound]);
+
   // Local-only state
   const [newsDeck, setNewsDeck] = useState(() => shuffleDeck(NEWS_CARDS));
   const [newsDeckIndex, setNewsDeckIndex] = useState(0);
