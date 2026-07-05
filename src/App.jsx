@@ -164,16 +164,18 @@ function App() {
         return updated;
       }));
       
-      if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
-        try {
-          const el = document.getElementById(`token-${movingPlayerId}`);
-          if (el && transformWrapperRef.current.zoomToElement) {
-            const state = transformWrapperRef.current.state || transformWrapperRef.current.instance?.transformState;
-            const scale = state?.scale || 1;
-            transformWrapperRef.current.zoomToElement(el, scale, 200, "linear");
-          }
-        } catch(e) { console.error(e); }
-      }
+      setTimeout(() => {
+        if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
+          try {
+            const el = document.getElementById(`token-${movingPlayerId}`);
+            if (el && transformWrapperRef.current.zoomToElement) {
+              const state = transformWrapperRef.current.state || transformWrapperRef.current.instance?.transformState;
+              const scale = state?.scale || 1;
+              transformWrapperRef.current.zoomToElement(el, scale, 180, "linear");
+            }
+          } catch(e) { console.error(e); }
+        }
+      }, 20);
     }
     await new Promise(r => setTimeout(r, 150));
     applyPendingState();
@@ -527,16 +529,18 @@ function App() {
         return updated;
       }));
 
-      if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
-        try {
-          const el = document.getElementById(`token-${movingPlayerId}`);
-          if (el && transformWrapperRef.current.zoomToElement) {
-            const state = transformWrapperRef.current.state || transformWrapperRef.current.instance?.transformState;
-            const scale = state?.scale || 1;
-            transformWrapperRef.current.zoomToElement(el, scale, 200, "linear");
-          }
-        } catch(e) { console.error(e); }
-      }
+      setTimeout(() => {
+        if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
+          try {
+            const el = document.getElementById(`token-${movingPlayerId}`);
+            if (el && transformWrapperRef.current.zoomToElement) {
+              const state = transformWrapperRef.current.state || transformWrapperRef.current.instance?.transformState;
+              const scale = state?.scale || 1;
+              transformWrapperRef.current.zoomToElement(el, scale, 180, "linear");
+            }
+          } catch(e) { console.error(e); }
+        }
+      }, 20);
     }
     await wait(150); // Small pause before landing action
     setIsMoving(false);
