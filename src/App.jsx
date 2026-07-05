@@ -765,13 +765,19 @@ function App() {
   const handleRoll = () => {
     if (actionPrompt || newsCard || isRollingDice || isMoving) return;
     if (mode === 'local') rollDiceLocal();
-    else rollDiceOnline();
+    else {
+      setIsRollingDice(true);
+      rollDiceOnline();
+    }
   };
   
   const handleBuy = () => {
     if (!actionPrompt || actionPrompt.type !== 'buy') return;
     if (mode === 'local') buyPropertyLocal();
-    else buyPropertyOnline();
+    else {
+      setActionPrompt(null);
+      buyPropertyOnline();
+    }
   };
   
   const handleSkip = () => {
@@ -779,6 +785,7 @@ function App() {
     if (mode === 'local') {
       startAuctionLocal();
     } else {
+      setActionPrompt(null);
       skipBuyOnline();
     }
   };
@@ -786,13 +793,19 @@ function App() {
   const handleContinue = () => {
     if (!actionPrompt) return;
     if (mode === 'local') nextTurnLocal();
-    else continueOnline();
+    else {
+      setActionPrompt(null);
+      continueOnline();
+    }
   };
   
   const handleCloseNews = () => {
     if (!newsCard) return;
     if (mode === 'local') applyNewsCardLocal();
-    else closeNewsOnline();
+    else {
+      setNewsCard(null);
+      closeNewsOnline();
+    }
   };
   
   const handleBuild = (spaceId) => {
