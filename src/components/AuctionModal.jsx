@@ -3,16 +3,6 @@ import { BOARD_SPACES, BOARD_COLORS } from '../data/boardData';
 import './AuctionModal.css';
 
 export default function AuctionModal({ auction, players, myId, isLocalMode, onBid, onWithdraw }) {
-  const [localTime, setLocalTime] = useState(auction.timeLeft);
-
-  useEffect(() => {
-    setLocalTime(auction.timeLeft);
-    const interval = setInterval(() => {
-      setLocalTime(prev => Math.max(0, prev - 1));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [auction.timeLeft]);
-
   const space = BOARD_SPACES.find(s => s.id === auction.spaceId);
   const highestBidder = players.find(p => p.id === auction.highestBidderId);
   const myPlayer = players.find(p => p.id === myId);
@@ -34,9 +24,6 @@ export default function AuctionModal({ auction, players, myId, isLocalMode, onBi
       <div className="auction-card">
         <div className="auction-header">
           <h2>🔨 Leilão</h2>
-          <div className={`auction-timer ${localTime <= 3 ? 'hurry' : ''}`}>
-            ⏱️ {localTime}s
-          </div>
         </div>
 
         <div className="auction-content">

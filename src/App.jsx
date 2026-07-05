@@ -51,7 +51,6 @@ function App() {
   const speedModeRef = useRef(false);
   const timeLeftRef = useRef(10);
   
-  const auctionTimerRef = useRef(null);
   const boardSectionRef = useRef(null);
   const sound = useSound();
   const music = useBackgroundMusic();
@@ -398,7 +397,9 @@ function App() {
   };
 
   // === LOCAL AUCTION LOGIC ===
-  const startAuctionLocal = (spaceId) => {
+  const startAuctionLocal = () => {
+    if (!actionPrompt) return;
+    const currentPrompt = actionPrompt;
     setActionPrompt(null);
     const initialParticipants = players.filter(p => !p.bankrupt).map(p => p.id);
     
@@ -406,35 +407,13 @@ function App() {
       nextTurnLocal();
       return;
     }
-
     setAuction({
-      spaceId,
-      highestBid: 10,
+      spaceId: currentPrompt.spaceId,
+      highestBid: Math.floor(currentPrompt.price / 2),
       highestBidderId: null,
       participants: initialParticipants,
-      active: true,
-      timeLeft: 10
+      active: true
     });
-
-    if (auctionTimerRef.current) clearInterval(auctionTimerRef.current);
-    auctionTimerRef.current = setInterval(() => {
-      setAuction(prev => {
-        if (!prev) {
-          clearInterval(auctionTimerRef.current);
-          return null;
-        }
-        const nextTime = prev.timeLeft - 1;
-        if (nextTime <= 0) {
-          clearInterval(auctionTimerRef.current);
-          // Can't easily call endAuctionLocal here because state might be stale
-          // We will use a useEffect to watch the timer, but setting state is fine
-          // Actually, we can just defer it:
-          setTimeout(() => endAuctionLocal(prev), 0);
-          return null;
-        }
-        return { ...prev, timeLeft: nextTime };
-      });
-    }, 1000);
   };
 
   const endAuctionLocal = (auctionState) => {
@@ -457,7 +436,7 @@ function App() {
       if (!prev || !prev.active) return prev;
       const player = players.find(p => p.id === playerId);
       if (player.money >= amount && amount > prev.highestBid) {
-        return { ...prev, highestBid: amount, highestBidderId: playerId, timeLeft: 10 };
+        return { ...prev, highestBid: amount, highestBidderId: playerId };
       }
       return prev;
     });
@@ -469,7 +448,6 @@ function App() {
       const nextParticipants = prev.participants.filter(id => id !== playerId);
       
       if (nextParticipants.length === 0 || (nextParticipants.length === 1 && nextParticipants[0] === prev.highestBidderId)) {
-        clearInterval(auctionTimerRef.current);
         setTimeout(() => endAuctionLocal({ ...prev, participants: nextParticipants }), 0);
         return null;
       }

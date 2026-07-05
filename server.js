@@ -415,38 +415,17 @@ io.on('connection', (socket) => {
     const room = rooms[code];
     if (!room || !room.started) return;
     const gs = room.gameState;
-    const player = gs.players[gs.currentPlayerIndex];
-    if (player.socketId !== socket.id) return;
-    
-    // Iniciar leilão da propriedade
-    const spaceId = gs.actionPrompt.spaceId;
-    gs.actionPrompt = null;
     
     gs.auction = {
-      spaceId,
-      highestBid: 10,
+      spaceId: gs.actionPrompt.spaceId,
+      highestBid: Math.floor(gs.actionPrompt.price / 2),
       highestBidderId: null,
       participants: gs.players.filter(p => !p.bankrupt).map(p => p.id),
-      active: true,
-      timeLeft: 10
+      active: true
     };
+    gs.actionPrompt = null;
     
     io.to(code).emit('gameUpdate', getFullGameState(room));
-    
-    if (room.auctionTimer) clearInterval(room.auctionTimer);
-    room.auctionTimer = setInterval(() => {
-      if (!gs.auction) {
-        clearInterval(room.auctionTimer);
-        return;
-      }
-      gs.auction.timeLeft -= 1;
-      if (gs.auction.timeLeft <= 0) {
-        clearInterval(room.auctionTimer);
-        endAuction(code);
-      } else {
-        io.to(code).emit('auctionTick', { timeLeft: gs.auction.timeLeft });
-      }
-    }, 1000);
   });
 
   socket.on('continueAction', ({ code }) => {
@@ -622,7 +601,6 @@ io.on('connection', (socket) => {
     if (player.money >= amount && amount > gs.auction.highestBid) {
       gs.auction.highestBid = amount;
       gs.auction.highestBidderId = player.id;
-      gs.auction.timeLeft = 10;
       io.to(code).emit('gameUpdate', getFullGameState(room));
     }
   });
@@ -640,7 +618,6 @@ io.on('connection', (socket) => {
     
     if (gs.auction.participants.length === 0 || 
        (gs.auction.participants.length === 1 && gs.auction.participants[0] === gs.auction.highestBidderId)) {
-      if (room.auctionTimer) clearInterval(room.auctionTimer);
       endAuction(code);
     } else {
       io.to(code).emit('gameUpdate', getFullGameState(room));
