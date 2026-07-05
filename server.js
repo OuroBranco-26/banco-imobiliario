@@ -281,7 +281,9 @@ io.on('connection', (socket) => {
     const pi = gs.currentPlayerIndex;
     const player = gs.players[pi];
     if (player.socketId !== socket.id) return; // Not your turn
-    if (gs.actionPrompt || gs.newsCard) return;
+    if (gs.actionPrompt || gs.newsCard || gs.isRolling) return;
+
+    gs.isRolling = true;
 
     // Generate duration of 1 second
     const duration = 1000;
@@ -291,6 +293,7 @@ io.on('connection', (socket) => {
 
     // Wait 'duration' seconds before calculating the result
     setTimeout(() => {
+      gs.isRolling = false;
       if (player.onVacation) {
         player.onVacation = false;
         gs.actionPrompt = { type: 'info', message: `🏖️ ${player.name} está de Férias! Descansando...` };
@@ -415,6 +418,9 @@ io.on('connection', (socket) => {
     const room = rooms[code];
     if (!room || !room.started) return;
     const gs = room.gameState;
+    const player = gs.players[gs.currentPlayerIndex];
+    if (player.socketId !== socket.id) return;
+    if (!gs.actionPrompt) return; // Prevent double click crashing or double skipping
     
     gs.auction = {
       spaceId: gs.actionPrompt.spaceId,
@@ -434,6 +440,8 @@ io.on('connection', (socket) => {
     const gs = room.gameState;
     const player = gs.players[gs.currentPlayerIndex];
     if (player.socketId !== socket.id) return;
+    if (!gs.actionPrompt) return; // Prevent double click skipping turn
+    
     nextTurn(gs);
     io.to(code).emit('gameUpdate', getFullGameState(room));
   });
@@ -444,10 +452,11 @@ io.on('connection', (socket) => {
     const gs = room.gameState;
     const player = gs.players[gs.currentPlayerIndex];
     if (player.socketId !== socket.id) return;
-    if (gs.newsCard) {
-      applyNewsCard(gs, gs.newsCard, gs.currentPlayerIndex);
-      gs.newsCard = null;
-    }
+    if (!gs.newsCard) return; // Prevent double click skipping turn
+    
+    applyNewsCard(gs, gs.newsCard, gs.currentPlayerIndex);
+    gs.newsCard = null;
+    
     nextTurn(gs);
     io.to(code).emit('gameUpdate', getFullGameState(room));
   });

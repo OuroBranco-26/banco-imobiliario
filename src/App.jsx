@@ -497,12 +497,14 @@ function App() {
   };
 
   const rollDiceLocal = async () => {
-    if (actionPrompt || newsCard || isMoving || isRollingDice) return;
+    if (actionPrompt || newsCard || isMoving || isRollingDice || animatingRef.current) return;
+    animatingRef.current = true;
     const player = players[currentPlayerIndex];
 
     if (player.onVacation) {
       setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, onVacation: false } : p));
       setActionPrompt({ type: 'info', message: `🏖️ ${player.name} está de Férias!` });
+      animatingRef.current = false;
       return;
     }
 
@@ -741,20 +743,48 @@ function App() {
   const unmortgageOnline = (spaceId) => socketRef.current?.emit('unmortgage', { code: roomCode, spaceId });
 
   // === UNIFIED HANDLERS ===
-  const handleRoll = mode === 'local' ? rollDiceLocal : rollDiceOnline;
-  const handleBuy = mode === 'local' ? buyPropertyLocal : buyPropertyOnline;
+  const handleRoll = () => {
+    if (actionPrompt || newsCard || isRollingDice || isMoving) return;
+    if (mode === 'local') rollDiceLocal();
+    else rollDiceOnline();
+  };
+  
+  const handleBuy = () => {
+    if (!actionPrompt || actionPrompt.type !== 'buy') return;
+    if (mode === 'local') buyPropertyLocal();
+    else buyPropertyOnline();
+  };
+  
   const handleSkip = () => {
+    if (!actionPrompt || actionPrompt.type !== 'buy') return;
     if (mode === 'local') {
-      const spaceId = actionPrompt.spaceId;
-      startAuctionLocal(spaceId);
+      startAuctionLocal();
     } else {
       skipBuyOnline();
     }
   };
-  const handleContinue = mode === 'local' ? nextTurnLocal : continueOnline;
-  const handleCloseNews = mode === 'local' ? applyNewsCardLocal : closeNewsOnline;
-  const handleBuild = mode === 'local' ? buildLocal : buildOnline;
-  const handleMortgage = mode === 'local' ? mortgageLocal : mortgageOnline;
+  
+  const handleContinue = () => {
+    if (!actionPrompt) return;
+    if (mode === 'local') nextTurnLocal();
+    else continueOnline();
+  };
+  
+  const handleCloseNews = () => {
+    if (!newsCard) return;
+    if (mode === 'local') applyNewsCardLocal();
+    else closeNewsOnline();
+  };
+  
+  const handleBuild = (spaceId) => {
+    if (mode === 'local') buildLocal(spaceId);
+    else buildOnline(spaceId);
+  };
+  
+  const handleMortgage = (spaceId) => {
+    if (mode === 'local') mortgageLocal(spaceId);
+    else mortgageOnline(spaceId);
+  };
 
   const handleAuctionBid = (amount, localPlayerId) => {
     if (mode === 'local') placeBidLocal(amount, localPlayerId);
