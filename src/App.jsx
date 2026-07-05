@@ -10,6 +10,7 @@ import VictoryScreen from './components/VictoryScreen';
 import TradeModal, { TradeIncoming } from './components/TradeModal';
 import AuctionModal from './components/AuctionModal';
 import TutorialModal from './components/TutorialModal';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useSound from './hooks/useSound';
 import useBackgroundMusic from './hooks/useBackgroundMusic';
 import { BOARD_SPACES, COLOR_GROUPS, RAILROAD_IDS } from './data/boardData';
@@ -933,9 +934,21 @@ function App() {
           </div>
         )}
 
-        <div className="board-outer-wrapper">
-          <Board players={players} ownership={ownership} buildings={buildings} mortgaged={mortgaged} />
-        </div>
+        <TransformWrapper 
+          initialScale={1} 
+          minScale={0.3} 
+          maxScale={3}
+          centerOnInit
+          wheel={{ step: 0.1 }}
+          pinch={{ step: 5 }}
+          doubleClick={{ disabled: true }}
+        >
+          <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+            <div className="board-outer-wrapper">
+              <Board players={players} ownership={ownership} buildings={buildings} mortgaged={mortgaged} />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
         
         {/* Out of bounds indicators */}
         {indicators.map(ind => (
