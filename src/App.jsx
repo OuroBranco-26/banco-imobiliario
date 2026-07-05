@@ -166,9 +166,13 @@ function App() {
       
       if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
         try {
-          const scale = transformWrapperRef.current.state?.scale || 1;
-          transformWrapperRef.current.zoomToElement(`token-${movingPlayerId}`, scale, 200);
-        } catch(e) {}
+          const el = document.getElementById(`token-${movingPlayerId}`);
+          if (el && transformWrapperRef.current.zoomToElement) {
+            const state = transformWrapperRef.current.state || transformWrapperRef.current.instance?.transformState;
+            const scale = state?.scale || 1;
+            transformWrapperRef.current.zoomToElement(el, scale, 200, "linear");
+          }
+        } catch(e) { console.error(e); }
       }
     }
     await new Promise(r => setTimeout(r, 150));
@@ -525,9 +529,13 @@ function App() {
 
       if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
         try {
-          const scale = transformWrapperRef.current.state?.scale || 1;
-          transformWrapperRef.current.zoomToElement(`token-${movingPlayerId}`, scale, 200);
-        } catch(e) {}
+          const el = document.getElementById(`token-${movingPlayerId}`);
+          if (el && transformWrapperRef.current.zoomToElement) {
+            const state = transformWrapperRef.current.state || transformWrapperRef.current.instance?.transformState;
+            const scale = state?.scale || 1;
+            transformWrapperRef.current.zoomToElement(el, scale, 200, "linear");
+          }
+        } catch(e) { console.error(e); }
       }
     }
     await wait(150); // Small pause before landing action
