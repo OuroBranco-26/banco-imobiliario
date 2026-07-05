@@ -148,7 +148,6 @@ function App() {
   };
 
   // Simulate dice rolling visual effect
-  const simulateDiceRoll = async (duration = 3000) => {
   const simulateDiceRoll = (duration) => {
     return new Promise(resolve => {
       sound.playDiceRoll();

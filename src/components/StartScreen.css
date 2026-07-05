@@ -219,7 +219,7 @@
 }
 
 /* Compact Landscape Mode */
-@media (max-height: 450px) and (orientation: landscape) {
+@media (max-height: 600px) and (orientation: landscape) {
   .start-container { padding: 0.8rem; gap: 0.4rem; max-width: 600px; }
   .start-title { font-size: 1.6rem; letter-spacing: 3px; }
   .start-subtitle { display: none; }
