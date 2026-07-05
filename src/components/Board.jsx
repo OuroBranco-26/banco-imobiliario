@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { BOARD_SPACES, BOARD_COLORS } from '../data/boardData';
+import { motion } from 'framer-motion';
 import './BoardStyle.css';
 
 const BoardSpace = memo(({ space, owner, playersHere, buildingCount, isMortgaged, visualEffects }) => {
@@ -91,15 +92,17 @@ const BoardSpace = memo(({ space, owner, playersHere, buildingCount, isMortgaged
       {playersHere.length > 0 && (
         <div className="players-container">
           {playersHere.map(p => (
-            <div 
+            <motion.div 
               key={p.id} 
               id={`token-${p.id}`}
+              layoutId={`token-${p.id}`}
               className="player-token" 
-              style={{ backgroundColor: p.color }}
+              style={{ backgroundColor: p.color, zIndex: 100 }}
               title={p.name}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
             >
               {p.avatar || ''}
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
