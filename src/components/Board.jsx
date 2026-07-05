@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { BOARD_SPACES, BOARD_COLORS } from '../data/boardData';
-import { motion } from 'framer-motion';
+import { motion, LayoutGroup } from 'framer-motion';
 import './BoardStyle.css';
 
 const BoardSpace = memo(({ space, owner, playersHere, buildingCount, isMortgaged, visualEffects }) => {
@@ -131,26 +131,28 @@ const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffec
       <div className="board-center">
         <h1 className="board-logo">BANCO<br/>IMOBILIÁRIO</h1>
       </div>
-      {BOARD_SPACES.map(space => {
-        const ownerId = ownership[space.id];
-        const owner = ownerId ? players.find(p => p.id === ownerId) : null;
-        const playersHere = players.filter(p => p.position === space.id);
-        const buildingCount = buildings[space.id] || 0;
-        const isMortgaged = mortgaged[space.id] || false;
-        const spaceEffects = visualEffects.filter(e => e.spaceId === space.id);
+      <LayoutGroup>
+        {BOARD_SPACES.map(space => {
+          const ownerId = ownership[space.id];
+          const owner = ownerId ? players.find(p => p.id === ownerId) : null;
+          const playersHere = players.filter(p => p.position === space.id);
+          const buildingCount = buildings[space.id] || 0;
+          const isMortgaged = mortgaged[space.id] || false;
+          const spaceEffects = visualEffects.filter(e => e.spaceId === space.id);
 
-        return (
-          <BoardSpace
-            key={space.id}
-            space={space}
-            owner={owner}
-            playersHere={playersHere}
-            buildingCount={buildingCount}
-            isMortgaged={isMortgaged}
-            visualEffects={spaceEffects}
-          />
-        );
-      })}
+          return (
+            <BoardSpace
+              key={space.id}
+              space={space}
+              owner={owner}
+              playersHere={playersHere}
+              buildingCount={buildingCount}
+              isMortgaged={isMortgaged}
+              visualEffects={spaceEffects}
+            />
+          );
+        })}
+      </LayoutGroup>
     </div>
   );
 };
