@@ -201,11 +201,16 @@ function App() {
       socket.on('animateMovement', handleAnimateMovement);
       socket.on('diceRolling', ({ duration }) => simulateDiceRoll(duration));
       socket.on('playEffect', ({ type, target }) => triggerEffect(type, target, false));
+      socket.on('tradeProposal', (trade) => setIncomingTrade(trade));
+      socket.on('tradeRejected', () => addLog('❌', 'Sua proposta de troca foi recusada'));
+      
       return () => {
         socket.off('gameUpdate', applyServerState);
         socket.off('animateMovement', handleAnimateMovement);
         socket.off('diceRolling');
         socket.off('playEffect');
+        socket.off('tradeProposal');
+        socket.off('tradeRejected');
       };
     }
   }, [mode]);
@@ -708,28 +713,40 @@ function App() {
   const handleTradeAccept = () => {
     if (!incomingTrade) return;
     const t = incomingTrade;
-    triggerEffect('trade', null, true);
-    addLog('🤝', `Troca aceita entre jogadores!`);
-    
-    // Transfer money
-    setPlayers(prev => prev.map(p => {
-      if (p.id === t.fromPlayerId) return { ...p, money: p.money - t.offerMoney + t.requestMoney };
-      if (p.id === t.toPlayerId) return { ...p, money: p.money + t.offerMoney - t.requestMoney };
-      return p;
-    }));
-    // Transfer properties
-    setOwnership(prev => {
-      const newOwn = { ...prev };
-      t.offerProperties.forEach(id => { newOwn[id] = t.toPlayerId; });
-      t.requestProperties.forEach(id => { newOwn[id] = t.fromPlayerId; });
-      return newOwn;
-    });
     setIncomingTrade(null);
+    
+    if (mode === 'local') {
+      triggerEffect('trade', null, true);
+      addLog('🤝', `Troca aceita entre jogadores!`);
+      
+      // Transfer money
+      setPlayers(prev => prev.map(p => {
+        if (p.id === t.fromPlayerId) return { ...p, money: p.money - t.offerMoney + t.requestMoney };
+        if (p.id === t.toPlayerId) return { ...p, money: p.money + t.offerMoney - t.requestMoney };
+        return p;
+      }));
+      // Transfer properties
+      setOwnership(prev => {
+        const newOwn = { ...prev };
+        t.offerProperties.forEach(id => { newOwn[id] = t.toPlayerId; });
+        t.requestProperties.forEach(id => { newOwn[id] = t.fromPlayerId; });
+        return newOwn;
+      });
+    } else {
+      socketRef.current?.emit('acceptTrade', { code: roomCode, trade: t });
+    }
   };
 
   const handleTradeReject = () => {
-    addLog('❌', 'Proposta de troca recusada');
+    if (!incomingTrade) return;
+    const t = incomingTrade;
     setIncomingTrade(null);
+    
+    if (mode === 'local') {
+      addLog('❌', 'Proposta de troca recusada');
+    } else {
+      socketRef.current?.emit('rejectTrade', { code: roomCode, trade: t });
+    }
   };
 
   // === ONLINE: ACTIONS ===
