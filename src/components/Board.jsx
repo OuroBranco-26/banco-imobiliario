@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { BOARD_SPACES, BOARD_COLORS } from '../data/boardData';
-import { motion, LayoutGroup } from 'framer-motion';
 import './BoardStyle.css';
 
 const BoardSpace = memo(({ space, owner, playersHere, buildingCount, isMortgaged, visualEffects }) => {
@@ -88,24 +87,6 @@ const BoardSpace = memo(({ space, owner, playersHere, buildingCount, isMortgaged
         <span className="space-name">{space.name}</span>
         {space.price && <span className="space-price">${space.price}</span>}
       </div>
-      
-      {playersHere.length > 0 && (
-        <div className="players-container">
-          {playersHere.map(p => (
-            <motion.div 
-              key={p.id} 
-              id={`token-${p.id}`}
-              layoutId={`token-${p.id}`}
-              className="player-token" 
-              style={{ backgroundColor: p.color, zIndex: 100 }}
-              title={p.name}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            >
-              {p.avatar || ''}
-            </motion.div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }, (prevProps, nextProps) => {
@@ -125,34 +106,93 @@ const BoardSpace = memo(({ space, owner, playersHere, buildingCount, isMortgaged
   return true;
 });
 
+const getSpaceCenter = (id) => {
+  if (id === 0) return { top: 93.75, left: 93.75 };
+  if (id === 10) return { top: 93.75, left: 6.25 };
+  if (id === 20) return { top: 6.25, left: 6.25 };
+  if (id === 30) return { top: 6.25, left: 93.75 };
+
+  if (id > 0 && id < 10) {
+    return { top: 93.75, left: 100 - (16.666 + (id - 1) * 8.333) };
+  }
+  if (id > 10 && id < 20) {
+    return { left: 6.25, top: 100 - (16.666 + (id - 11) * 8.333) };
+  }
+  if (id > 20 && id < 30) {
+    return { top: 6.25, left: 16.666 + (id - 21) * 8.333 };
+  }
+  if (id > 30 && id < 40) {
+    return { left: 93.75, top: 16.666 + (id - 31) * 8.333 };
+  }
+  return { top: 50, left: 50 };
+};
+
 const Board = ({ players, ownership, buildings = {}, mortgaged = {}, visualEffects = [] }) => {
   return (
     <div className="board">
       <div className="board-center">
         <h1 className="board-logo">BANCO<br/>IMOBILIÁRIO</h1>
       </div>
-      <LayoutGroup>
-        {BOARD_SPACES.map(space => {
-          const ownerId = ownership[space.id];
-          const owner = ownerId ? players.find(p => p.id === ownerId) : null;
-          const playersHere = players.filter(p => p.position === space.id);
-          const buildingCount = buildings[space.id] || 0;
-          const isMortgaged = mortgaged[space.id] || false;
-          const spaceEffects = visualEffects.filter(e => e.spaceId === space.id);
+      
+      {BOARD_SPACES.map(space => {
+        const ownerId = ownership[space.id];
+        const owner = ownerId ? players.find(p => p.id === ownerId) : null;
+        const playersHere = players.filter(p => p.position === space.id);
+        const buildingCount = buildings[space.id] || 0;
+        const isMortgaged = mortgaged[space.id] || false;
+        const spaceEffects = visualEffects.filter(e => e.spaceId === space.id);
+
+        return (
+          <BoardSpace
+            key={space.id}
+            space={space}
+            owner={owner}
+            playersHere={playersHere}
+            buildingCount={buildingCount}
+            isMortgaged={isMortgaged}
+            visualEffects={spaceEffects}
+          />
+        );
+      })}
+
+      <div className="absolute-tokens-layer" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none' }}>
+        {players.map(p => {
+          const center = getSpaceCenter(p.position);
+          
+          const playersOnSpace = players.filter(pl => pl.position === p.position);
+          const myIndex = playersOnSpace.findIndex(pl => pl.id === p.id);
+          
+          let offsetX = 0;
+          let offsetY = 0;
+          if (playersOnSpace.length > 1) {
+            const offsets = [[-10, -10], [10, -10], [-10, 10], [10, 10], [0, 0], [-20, 0]];
+            if (myIndex < offsets.length) {
+              offsetX = offsets[myIndex][0];
+              offsetY = offsets[myIndex][1];
+            }
+          }
 
           return (
-            <BoardSpace
-              key={space.id}
-              space={space}
-              owner={owner}
-              playersHere={playersHere}
-              buildingCount={buildingCount}
-              isMortgaged={isMortgaged}
-              visualEffects={spaceEffects}
-            />
+            <div 
+              key={p.id}
+              id={`token-${p.id}`}
+              className="player-token"
+              style={{
+                position: 'absolute',
+                top: `calc(${center.top}% + ${offsetY}px - 17px)`,
+                left: `calc(${center.left}% + ${offsetX}px - 17px)`,
+                backgroundColor: p.color,
+                zIndex: 100,
+                transition: 'top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                pointerEvents: 'auto'
+              }}
+              title={p.name}
+            >
+              {p.avatar || ''}
+            </div>
           );
         })}
-      </LayoutGroup>
+      </div>
     </div>
   );
 };
