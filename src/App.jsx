@@ -1074,6 +1074,12 @@ function App() {
                 </div>
               </>
             )}
+            {actionPrompt.type === 'buy' && !isMyTurn && (
+              <>
+                <h3>Aguardando Decisão</h3>
+                <p>Aguardando jogador decidir se compra: <strong>{BOARD_SPACES.find(s => s.id === actionPrompt.spaceId)?.name}</strong></p>
+              </>
+            )}
             {(actionPrompt.type === 'rent' || actionPrompt.type === 'info') && (
               <>
                 <h3>Aviso</h3>
