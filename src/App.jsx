@@ -49,6 +49,18 @@ function App() {
   const [tutorialSeen, setTutorialSeen] = useState(false);
   
   const boardSectionRef = useRef(null);
+  const transformWrapperRef = useRef(null);
+  const [cameraFollow, setCameraFollow] = useState(() => {
+    const saved = localStorage.getItem('cameraFollow');
+    return saved !== 'false'; // defaults to true
+  });
+  const cameraFollowRef = useRef(cameraFollow);
+  
+  useEffect(() => {
+    cameraFollowRef.current = cameraFollow;
+    localStorage.setItem('cameraFollow', cameraFollow);
+  }, [cameraFollow]);
+
   const sound = useSound();
   const music = useBackgroundMusic();
 
@@ -143,12 +155,21 @@ function App() {
       await new Promise(r => setTimeout(r, 200));
       pos = (pos + 1) % 40;
       const newPos = pos;
+      let movingPlayerId = null;
       setPlayers(prev => prev.map((p, i) => {
         if (i !== playerIdx) return p;
+        movingPlayerId = p.id;
         const updated = { ...p, position: newPos };
         if (newPos === 0) updated.money = p.money + 500;
         return updated;
       }));
+      
+      if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
+        try {
+          const scale = transformWrapperRef.current.state?.scale || 1;
+          transformWrapperRef.current.zoomToElement(`token-${movingPlayerId}`, scale, 200);
+        } catch(e) {}
+      }
     }
     await new Promise(r => setTimeout(r, 150));
     applyPendingState();
@@ -490,8 +511,10 @@ function App() {
       await wait(200);
       pos = (pos + 1) % 40;
       const newPos = pos;
+      let movingPlayerId = null;
       setPlayers(prev => prev.map((p, i) => {
         if (i !== playerIdx) return p;
+        movingPlayerId = p.id;
         const updated = { ...p, position: newPos };
         if (newPos === 0) {
           updated.money = p.money + 500;
@@ -499,6 +522,13 @@ function App() {
         }
         return updated;
       }));
+
+      if (cameraFollowRef.current && movingPlayerId && transformWrapperRef.current) {
+        try {
+          const scale = transformWrapperRef.current.state?.scale || 1;
+          transformWrapperRef.current.zoomToElement(`token-${movingPlayerId}`, scale, 200);
+        } catch(e) {}
+      }
     }
     await wait(150); // Small pause before landing action
     setIsMoving(false);
@@ -942,6 +972,7 @@ function App() {
       <div className="board-section glass-panel" ref={boardSectionRef} style={{ position: 'relative' }}>
         
         <TransformWrapper 
+          ref={transformWrapperRef}
           initialScale={1} 
           minScale={0.3} 
           maxScale={3}
@@ -976,6 +1007,19 @@ function App() {
       <div className="ui-section glass-panel">
         <div className="ui-scroll-content">
           <header className="header">
+            <div className="header-actions">
+              <button 
+                className="sound-toggle" 
+                onClick={() => setCameraFollow(!cameraFollow)} 
+                title="Câmera que segue o jogador"
+                style={{ opacity: cameraFollow ? 1 : 0.5 }}
+              >
+                🎥
+              </button>
+              <button className="sound-toggle" onClick={() => sound.toggleSound()} title="Efeitos Sonoros">
+                {sound.soundEnabled ? '🔊' : '🔇'}
+              </button>
+            </div>
             <div className="header-controls">
               {mode === 'online' && <span className="room-badge">Sala: {roomCode}</span>}
               <div className="music-controls">
