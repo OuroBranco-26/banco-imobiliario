@@ -536,8 +536,9 @@ function App() {
       } else {
         setPlayers(prev => prev.map((p, i) => i === currentPlayerIndex ? { ...p, jailTurns: jt } : p));
         const rem = 3 - jt;
-        setActionPrompt({ type: 'info', message: `🔒 ${d1} e ${d2} — Não iguais! ${rem === 0 ? 'Próxima sai!' : `Restam ${rem}.`}` });
+        setActionPrompt({ type: 'info', message: `🎲 ${d1} e ${d2} — Não iguais! ${rem === 0 ? 'Próxima sai!' : `Restam ${rem}.`}` });
       }
+      animatingRef.current = false;
       return;
     }
 
@@ -545,6 +546,7 @@ function App() {
     const finalPos = await animateMove(currentPlayerIndex, startPos, total);
     const passedGo = (startPos + total) >= 40;
     handleLandingLocal(finalPos, total, passedGo);
+    animatingRef.current = false;
   };
 
   const calculateRentLocal = (space, dt) => {
