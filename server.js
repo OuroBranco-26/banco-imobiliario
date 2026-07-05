@@ -282,8 +282,10 @@ io.on('connection', (socket) => {
     const player = gs.players[pi];
     if (player.socketId !== socket.id) return; // Not your turn
     if (gs.actionPrompt || gs.newsCard || gs.isRolling) return;
+    if (gs.diceTotal !== null) return; // Already rolled this turn!
 
     gs.isRolling = true;
+    gs.diceTotal = 0; // Lock the roll immediately
 
     // Generate duration of 1 second
     const duration = 1000;

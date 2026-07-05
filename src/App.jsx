@@ -35,6 +35,7 @@ function App() {
   const [newsCard, setNewsCard] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
   const [isRollingDice, setIsRollingDice] = useState(false);
+  const [isWaitingServer, setIsWaitingServer] = useState(false);
   const [indicators, setIndicators] = useState([]);
   const [visualEffects, setVisualEffects] = useState([]);
   const [gameLog, setGameLog] = useState([]);
@@ -108,6 +109,7 @@ function App() {
     if (gs.log) setGameLog(gs.log);
     if (gs.auction !== undefined) setAuction(gs.auction);
     setIsMoving(false);
+    setIsWaitingServer(false);
   };
 
   const applyPendingState = () => {
@@ -126,10 +128,12 @@ function App() {
     }
     setIsMoving(false);
     animatingRef.current = false;
+    setIsWaitingServer(false);
   };
 
   const handleAnimateMovement = async ({ playerIdx, fromPos, steps, diceValues: dv, diceTotal: dt }) => {
     animatingRef.current = true;
+    setIsWaitingServer(false);
     setIsMoving(true);
     setDiceValues(dv);
     setDiceTotal(dt);
@@ -763,59 +767,72 @@ function App() {
 
   // === UNIFIED HANDLERS ===
   const handleRoll = () => {
-    if (actionPrompt || newsCard || isRollingDice || isMoving) return;
+    if (actionPrompt || newsCard || isRollingDice || isMoving || isWaitingServer) return;
     if (mode === 'local') rollDiceLocal();
     else {
+      setIsWaitingServer(true);
       setIsRollingDice(true);
       rollDiceOnline();
     }
   };
   
   const handleBuy = () => {
-    if (!actionPrompt || actionPrompt.type !== 'buy') return;
+    if (!actionPrompt || actionPrompt.type !== 'buy' || isWaitingServer) return;
     if (mode === 'local') buyPropertyLocal();
     else {
+      setIsWaitingServer(true);
       setActionPrompt(null);
       buyPropertyOnline();
     }
   };
   
   const handleSkip = () => {
-    if (!actionPrompt || actionPrompt.type !== 'buy') return;
+    if (!actionPrompt || actionPrompt.type !== 'buy' || isWaitingServer) return;
     if (mode === 'local') {
       startAuctionLocal();
     } else {
+      setIsWaitingServer(true);
       setActionPrompt(null);
       skipBuyOnline();
     }
   };
   
   const handleContinue = () => {
-    if (!actionPrompt) return;
+    if (!actionPrompt || isWaitingServer) return;
     if (mode === 'local') nextTurnLocal();
     else {
+      setIsWaitingServer(true);
       setActionPrompt(null);
       continueOnline();
     }
   };
   
   const handleCloseNews = () => {
-    if (!newsCard) return;
+    if (!newsCard || isWaitingServer) return;
     if (mode === 'local') applyNewsCardLocal();
     else {
+      setIsWaitingServer(true);
       setNewsCard(null);
       closeNewsOnline();
     }
   };
   
   const handleBuild = (spaceId) => {
+    if (isWaitingServer) return;
     if (mode === 'local') buildLocal(spaceId);
-    else buildOnline(spaceId);
+    else {
+      setIsWaitingServer(true);
+      buildOnline(spaceId);
+    }
   };
   
   const handleMortgage = (spaceId) => {
+    if (isWaitingServer) return;
     if (mode === 'local') mortgageLocal(spaceId);
-    else mortgageOnline(spaceId);
+    else {
+      setIsWaitingServer(true);
+      mortgageOnline(spaceId);
+    }
   };
 
   const handleAuctionBid = (amount, localPlayerId) => {
@@ -1213,10 +1230,10 @@ function App() {
           <button
             className="roll-btn"
             onClick={handleRoll}
-            disabled={actionPrompt !== null || newsCard !== null || isMoving || isRollingDice || (auction && auction.active)}
-            style={{ opacity: (actionPrompt || newsCard || isMoving || isRollingDice || (auction && auction.active)) ? 0.5 : 1 }}
+            disabled={actionPrompt !== null || newsCard !== null || isMoving || isRollingDice || isWaitingServer || (auction && auction.active)}
+            style={{ opacity: (actionPrompt || newsCard || isMoving || isRollingDice || isWaitingServer || (auction && auction.active)) ? 0.5 : 1 }}
           >
-            {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🚓 Sair do Presídio' : 'Rolar Dados'}
+            {(auction && auction.active) ? 'Em Leilão...' : isRollingDice ? 'Rolando...' : isMoving ? 'Movendo...' : isWaitingServer ? 'Aguardando...' : currentPlayer.onVacation ? '🏖️ Férias...' : currentPlayer.inJail ? '🚓 Sair do Presídio' : 'Rolar Dados'}
           </button>
         )}
       </div>
