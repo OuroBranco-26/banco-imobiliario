@@ -264,8 +264,8 @@ io.on('connection', (socket) => {
     if (player.socketId !== socket.id) return; // Not your turn
     if (gs.actionPrompt || gs.newsCard) return;
 
-    // Generate random duration between 1 and 4 seconds
-    const duration = Math.floor(Math.random() * 3000) + 1000;
+    // Generate duration of 1 second
+    const duration = 1000;
 
     // Broadcast rolling animation
     io.to(code).emit('diceRolling', { duration });

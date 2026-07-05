@@ -517,7 +517,7 @@ function App() {
       return;
     }
 
-    const duration = Math.floor(Math.random() * 3000) + 1000;
+    const duration = 1000;
     await simulateDiceRoll(duration);
 
     const d1 = Math.floor(Math.random() * 6) + 1;
