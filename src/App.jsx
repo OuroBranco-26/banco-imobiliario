@@ -46,10 +46,6 @@ function App() {
   // === TIMER & TUTORIAL STATE ===
   const [showTutorial, setShowTutorial] = useState(false);
   const [tutorialSeen, setTutorialSeen] = useState(false);
-  const [speedMode, setSpeedMode] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(10);
-  const speedModeRef = useRef(false);
-  const timeLeftRef = useRef(10);
   
   const boardSectionRef = useRef(null);
   const sound = useSound();
@@ -798,53 +794,6 @@ function App() {
     return BOARD_SPACES.filter(s => canBuildLocal(s.id));
   };
 
-  // === TIMER & SPEED MODE LOGIC ===
-  useEffect(() => {
-    if (!speedMode && gameStarted) {
-      if (currentPlayerIndex > 0 || (currentPlayerIndex === 0 && diceTotal > 0)) {
-        setSpeedMode(true);
-        speedModeRef.current = true;
-      }
-    }
-  }, [currentPlayerIndex, diceTotal, gameStarted, speedMode]);
-
-  useEffect(() => {
-    // Reset timer on turn change or prompt change
-    let newTime = 10;
-    if (actionPrompt && actionPrompt.type === 'buy') newTime = 5;
-    else if (actionPrompt && actionPrompt.type === 'info') newTime = 7;
-    else if (newsCard) newTime = 7;
-    
-    setTimeLeft(newTime);
-    timeLeftRef.current = newTime;
-  }, [currentPlayerIndex, actionPrompt, newsCard]);
-
-  useEffect(() => {
-    if (!gameStarted || !isMyTurn || !speedMode) return;
-    if (auction && auction.active) return;
-    if (incomingTrade || showTradeModal) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        const nextTime = prev - 1;
-        timeLeftRef.current = nextTime;
-        if (nextTime <= 0) {
-          clearInterval(timer);
-          // Time's up! Execute default action
-          if (!diceTotal) handleRoll();
-          else if (actionPrompt && actionPrompt.type === 'buy') handleSkip();
-          else if (actionPrompt && actionPrompt.type === 'info') handleContinue();
-          else if (newsCard) handleCloseNews();
-          else handleContinue();
-          return 0;
-        }
-        return nextTime;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [gameStarted, isMyTurn, speedMode, auction, incomingTrade, showTradeModal, diceTotal, actionPrompt, newsCard]);
-
   // === TUTORIAL LOGIC ===
   useEffect(() => {
     if (gameStarted && !tutorialSeen) {
@@ -913,20 +862,6 @@ function App() {
       {showTutorial && <TutorialModal onClose={() => setShowTutorial(false)} />}
       <div className="board-section glass-panel" ref={boardSectionRef} style={{ position: 'relative' }}>
         
-        {/* Speed Mode Timer */}
-        {speedMode && gameStarted && (
-          <div className="speed-timer" style={{
-            position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 2000,
-            background: timeLeft <= 3 ? 'rgba(239, 68, 68, 0.9)' : 'rgba(0,0,0,0.6)',
-            padding: '5px 12px', borderRadius: '20px',
-            color: 'white', fontWeight: 'bold', border: '1px solid rgba(255,255,255,0.2)',
-            transition: 'background 0.3s ease',
-            animation: timeLeft <= 3 && isMyTurn ? 'musicPulse 1s infinite' : 'none'
-          }}>
-            ⏱️ {timeLeft}s {isMyTurn ? '(Sua Vez!)' : ''}
-          </div>
-        )}
-
         <TransformWrapper 
           initialScale={1} 
           minScale={0.3} 
