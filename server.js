@@ -121,7 +121,7 @@ function createRoom(hostSocketId, hostName, hostColor, hostAvatar) {
   rooms[code] = {
     code,
     hostId: hostSocketId,
-    players: [{ socketId: hostSocketId, name: hostName, color: hostColor, avatar: hostAvatar, ready: true }],
+    players: [{ socketId: hostSocketId, name: hostName, color: hostColor, avatar: hostAvatar, ready: true, connected: true }],
     started: false,
     gameState: null,
   };
@@ -145,6 +145,7 @@ function initGameState(room) {
     jailTurns: 0,
     onVacation: false,
     bankrupt: false,
+    connected: true,
   }));
 
   room.gameState = {
@@ -234,11 +235,29 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ code, name, color, avatar }, cb) => {
     const room = rooms[code];
     if (!room) return cb({ error: 'Sala não encontrada.' });
-    if (room.started) return cb({ error: 'Jogo já começou.' });
+    
+    if (room.started) {
+      // Tentar reconectar jogador
+      const disconnectedIdx = room.players.findIndex(p => p.name === name && p.color === color && p.connected === false);
+      if (disconnectedIdx !== -1) {
+        room.players[disconnectedIdx].socketId = socket.id;
+        room.players[disconnectedIdx].connected = true;
+        if (room.gameState && room.gameState.players[disconnectedIdx]) {
+          room.gameState.players[disconnectedIdx].socketId = socket.id;
+          room.gameState.players[disconnectedIdx].connected = true;
+        }
+        socket.join(code);
+        io.to(code).emit('gameUpdate', getFullGameState(room));
+        console.log(`🔌 ${name} reconectou na sala ${code}`);
+        return cb({ code, players: room.players, reconnected: true, gameState: getFullGameState(room) });
+      }
+      return cb({ error: 'Jogo já começou ou nome/cor não correspondem a um jogador desconectado.' });
+    }
+
     if (room.players.length >= 6) return cb({ error: 'Sala cheia (máximo 6).' });
     if (room.players.find(p => p.color === color)) return cb({ error: 'Cor já em uso.' });
 
-    room.players.push({ socketId: socket.id, name, color, avatar, ready: true });
+    room.players.push({ socketId: socket.id, name, color, avatar, ready: true, connected: true });
     socket.join(code);
     io.to(code).emit('lobbyUpdate', { players: room.players });
     cb({ code, players: room.players });
@@ -639,14 +658,27 @@ io.on('connection', (socket) => {
       const room = rooms[code];
       const idx = room.players.findIndex(p => p.socketId === socket.id);
       if (idx !== -1) {
-        room.players.splice(idx, 1);
-        if (room.players.length === 0) {
-          delete rooms[code];
-          console.log(`🗑️ Sala ${code} removida`);
+        if (room.started) {
+          room.players[idx].connected = false;
+          if (room.gameState && room.gameState.players[idx]) {
+            room.gameState.players[idx].connected = false;
+          }
+          io.to(code).emit('gameUpdate', getFullGameState(room));
+          
+          const allDisconnected = room.players.every(p => p.connected === false);
+          if (allDisconnected) {
+            delete rooms[code];
+            console.log(`🗑️ Sala ${code} removida (todos desconectados)`);
+          }
         } else {
-          if (room.hostId === socket.id) room.hostId = room.players[0].socketId;
-          io.to(code).emit('lobbyUpdate', { players: room.players });
-          if (room.started) io.to(code).emit('playerDisconnected', { socketId: socket.id });
+          room.players.splice(idx, 1);
+          if (room.players.length === 0) {
+            delete rooms[code];
+            console.log(`🗑️ Sala ${code} removida`);
+          } else {
+            if (room.hostId === socket.id) room.hostId = room.players[0].socketId;
+            io.to(code).emit('lobbyUpdate', { players: room.players });
+          }
         }
       }
     }

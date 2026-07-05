@@ -1132,14 +1132,17 @@ function App() {
 
         <div className="players-list">
           {players.map(p => (
-            <div key={p.id} className={`player-card ${p.socketId === mySocketId ? 'is-me' : ''} ${p.bankrupt ? 'bankrupt' : ''}`} style={{ borderLeftColor: p.color }}>
+            <div key={p.id} className={`player-card ${p.socketId === mySocketId ? 'is-me' : ''} ${p.bankrupt ? 'bankrupt' : ''}`} style={{ borderLeftColor: p.color, opacity: p.connected === false ? 0.6 : 1 }}>
               <div className="player-info">
                 <span className="player-name">
                   <div className="avatar-container">
                     {p.avatar && <span className="player-avatar">{p.avatar}</span>}
                     {p.inJail && <span className="jail-bars-overlay">⛓️</span>}
                   </div>
-                  <span className="player-name">{p.name}</span>
+                  <span className="player-name">
+                    {p.name}
+                    {p.connected === false && <span style={{ color: '#ef4444', fontSize: '0.8rem', marginLeft: '5px' }}>(Desconectado)</span>}
+                  </span>
                   {visualEffects.filter(e => e.playerId === p.id).map(e => (
                     <div key={e.id} className="effect-container">
                       <span className={e.type === 'coin-loss' ? 'effect-coin-loss' : 'effect-coin'}>🪙</span>

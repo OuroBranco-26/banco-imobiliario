@@ -21,17 +21,24 @@ const PLAYER_AVATARS = [
 
 const LobbyScreen = ({ socket, onGameStart, onBack }) => {
   const [screen, setScreen] = useState('menu'); // menu, create, join, waiting
-  const [name, setName] = useState('');
-  const [color, setColor] = useState(PLAYER_COLORS[0].value);
-  const [avatar, setAvatar] = useState(PLAYER_AVATARS[0].emoji);
+  const [name, setName] = useState(() => localStorage.getItem('banco_imobiliario_name') || '');
+  const [color, setColor] = useState(() => localStorage.getItem('banco_imobiliario_color') || PLAYER_COLORS[0].value);
+  const [avatar, setAvatar] = useState(() => localStorage.getItem('banco_imobiliario_avatar') || PLAYER_AVATARS[0].emoji);
   const [roomCode, setRoomCode] = useState('');
   const [currentCode, setCurrentCode] = useState('');
   const [lobbyPlayers, setLobbyPlayers] = useState([]);
   const [error, setError] = useState('');
   const [isHost, setIsHost] = useState(false);
 
+  const savePreferences = () => {
+    localStorage.setItem('banco_imobiliario_name', name.trim());
+    localStorage.setItem('banco_imobiliario_color', color);
+    localStorage.setItem('banco_imobiliario_avatar', avatar);
+  };
+
   const handleCreate = () => {
     if (!name.trim()) { setError('Digite seu nome!'); return; }
+    savePreferences();
     socket.emit('createRoom', { name: name.trim(), color, avatar }, (res) => {
       if (res.error) { setError(res.error); return; }
       setCurrentCode(res.code);
@@ -48,8 +55,15 @@ const LobbyScreen = ({ socket, onGameStart, onBack }) => {
   const handleJoin = () => {
     if (!name.trim()) { setError('Digite seu nome!'); return; }
     if (!roomCode.trim()) { setError('Digite o código da sala!'); return; }
+    savePreferences();
     socket.emit('joinRoom', { code: roomCode.trim().toUpperCase(), name: name.trim(), color, avatar }, (res) => {
       if (res.error) { setError(res.error); return; }
+      
+      if (res.reconnected) {
+        onGameStart(res.gameState, res.code);
+        return;
+      }
+
       setCurrentCode(res.code);
       setLobbyPlayers(res.players);
       setIsHost(false);
